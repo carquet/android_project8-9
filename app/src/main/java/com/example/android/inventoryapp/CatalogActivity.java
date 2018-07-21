@@ -1,9 +1,12 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryDbHelper;
@@ -17,12 +20,8 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
-
-        /* instance of SQLiteOpenHelper to access our database, we pass the context of the activity */
-        //mDbHelper = new InventoryDbHelper(this);
-
-
         displayDatabaseInfo();
+
 
     }
 
@@ -52,4 +51,45 @@ public class CatalogActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+
+    private void insertBooks(){
+
+        //put the database into writable mode
+        mInventoryDb = mDbHelper.getWritableDatabase();
+
+        //you create an object  of ContentValues.
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN__PRODUCT_NAME, "English File");
+        values.put(BookEntry.COLUMN_PRICE, 22);
+        values.put(BookEntry.COLUMN_IN_STOCK, 1);
+        values.put(BookEntry.COLUMN_QUANTITY, 5);
+        values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Midleton");
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "555-345-234");
+
+        //insert a new roa in the table with a specific ID
+        long newRowId = mInventoryDb.insert(BookEntry.TABLE_NAME, null, values);
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Insert dummy data" menu option
+            case R.id.action_insert_dummy_data:
+                insertBooks();
+                displayDatabaseInfo();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
