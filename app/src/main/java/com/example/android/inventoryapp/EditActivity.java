@@ -125,7 +125,7 @@ public class EditActivity extends AppCompatActivity {
         int price = Integer.parseInt(priceString);
         String quantityString = quantityEdittext.getText().toString().trim();
         int quantity = Integer.parseInt(quantityString);
-        String supplierNameString = supplierPhoneNumberEdittext.getText().toString().trim();
+        String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEdittext.getText().toString().trim();
 
         //create the DB helper
