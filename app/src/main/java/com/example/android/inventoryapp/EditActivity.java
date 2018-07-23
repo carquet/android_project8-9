@@ -1,5 +1,7 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,12 +21,12 @@ import com.example.android.inventoryapp.data.InventoryDbHelper;
 /** allows user to create or update a new product from the inventory */
 public class EditActivity extends AppCompatActivity {
 
-    private EditText productName;
-    private EditText supplierName;
-    private EditText supplierPhoneNumber;
+    private EditText productNameEditText;
+    private EditText supplierNameEditText;
+    private EditText supplierPhoneNumberEdittext;
     private Spinner inStockSpinner;
-    private EditText price;
-    private EditText quantity;
+    private EditText priceEditText;
+    private EditText quantityEdittext;
 
     /**
      * Gender of the pet. The possible valid values are in the BookContract.java file:
@@ -37,12 +39,12 @@ public class EditActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit);
 
         // Find all relevant views that we will need to read user input from
-        productName = (EditText) findViewById(R.id.edit_product_name);
-        supplierName = (EditText) findViewById(R.id.edit_supplier_name);
-        supplierPhoneNumber = (EditText) findViewById(R.id.edit_supplier_phone_number);
+        productNameEditText = (EditText) findViewById(R.id.edit_product_name);
+        supplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
+        supplierPhoneNumberEdittext = (EditText) findViewById(R.id.edit_supplier_phone_number);
         inStockSpinner = (Spinner) findViewById(R.id.spinner_in_stock);
-        price = (EditText) findViewById(R.id.edit_price);
-        quantity = (EditText) findViewById(R.id.edit_quantity);
+        priceEditText = (EditText) findViewById(R.id.edit_price);
+        quantityEdittext = (EditText) findViewById(R.id.edit_quantity);
 
 
         setupSpinner();
@@ -101,7 +103,7 @@ public class EditActivity extends AppCompatActivity {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save books to inventory database
-                //insert();
+                insert();
                 // Exit activity
                 finish();
                 return true;
@@ -112,5 +114,35 @@ public class EditActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void insert() {
+
+        // Read from input fields
+        // Use trim to eliminate leading or trailing white space
+        String productNameString = productNameEditText.getText().toString().trim();
+        String priceString = priceEditText.getText().toString().trim();
+        int price = Integer.parseInt(priceString);
+        String quantityString = quantityEdittext.getText().toString().trim();
+        int quantity = Integer.parseInt(quantityString);
+        String supplierNameString = supplierPhoneNumberEdittext.getText().toString().trim();
+        String supplierPhoneNumber = supplierPhoneNumberEdittext.getText().toString().trim();
+
+        //create the DB helper
+        InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
+        //put the database into writable mode
+        SQLiteDatabase mInventoryDb= mDbHelper.getWritableDatabase();
+
+        //you create an object  of ContentValues.
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
+        values.put(BookEntry.COLUMN_PRICE, price);
+        values.put(BookEntry.COLUMN_IN_STOCK, stock);
+        values.put(BookEntry.COLUMN_QUANTITY, quantity);
+        values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+
+        //insert a new roa in the table with a specific ID
+        long newRowId = mInventoryDb.insert(BookEntry.TABLE_NAME, null, values);
     }
 }

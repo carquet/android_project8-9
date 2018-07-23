@@ -37,28 +37,88 @@ public class CatalogActivity extends AppCompatActivity {
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity.
         mDbHelper = new InventoryDbHelper(this);
+
     }
+
+    @Override
+    protected void onStart() {
+    super.onStart();
+    displayDatabaseInfo();
+    }
+
 
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the books database.
      */
     private void displayDatabaseInfo() {
-        // To access our database, we instantiate our subclass of SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new InventoryDbHelper(this);
+        //open your databse to read it.
+        SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
-        // Create and/or open a database to read from it
-        mInventoryDb = mDbHelper.getReadableDatabase();
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                BookEntry._ID,
+                BookEntry.COLUMN__PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_IN_STOCK,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
-        // Perform this raw SQL query "SELECT * FROM books"
-        // to get a Cursor that contains all rows from the books table.
-        Cursor cursor = mInventoryDb.rawQuery("SELECT * FROM " + BookEntry.TABLE_NAME, null);
+        // Perform a query on the pets table
+        Cursor cursor = db.query(
+                BookEntry.TABLE_NAME,   // The table to query
+                projection,            // The columns to return
+                null,                  // The columns for the WHERE clause
+                null,                  // The values for the WHERE clause
+                null,                  // Don't group the rows
+                null,                  // Don't filter by row groups
+                null);                   // The sort order
+
+        TextView displayView = (TextView) findViewById(R.id.text_view_books);
+
         try {
-            // Display the number of rows in the Cursor (which reflects the number of rows in the
-            // books table in the database).
-            TextView displayView = (TextView) findViewById(R.id.text_view_books);
-            displayView.setText("Number of rows in the books database table: " + cursor.getCount());
+            // Create a header in the Text View
+            displayView.setText("The books table contains " + cursor.getCount() + " books.\n\n");
+            displayView.append(BookEntry._ID + " - " +
+                            BookEntry.COLUMN__PRODUCT_NAME + " - " +
+                            BookEntry.COLUMN_PRICE + " - " +
+                            BookEntry.COLUMN_IN_STOCK + " - " +
+                            BookEntry.COLUMN_QUANTITY + " - " +
+                            BookEntry.COLUMN_SUPPLIER_NAME + " - " +
+                    BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
+
+            // Figure out the index of each column
+            int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
+            int productNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN__PRODUCT_NAME);
+            int priceColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int stockColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_IN_STOCK);
+            int quantityColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+            int supplierNameColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+            int phoneNumberColumnIndex = cursor.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+
+            // Iterate through all the returned rows in the cursor
+            while (cursor.moveToNext()) {
+                // Use that index to extract the String or Int value of the word
+                // at the current row the cursor is on.
+                int currentID = cursor.getInt(idColumnIndex);
+                String currentProductName = cursor.getString(productNameColumnIndex);
+                String currentPrice = cursor.getString(priceColumnIndex);
+                int currentStock = cursor.getInt(stockColumnIndex);
+                int currentQuantity = cursor.getInt(quantityColumnIndex);
+                int currentSupplierName = cursor.getInt(supplierNameColumnIndex);
+                int currentPhoneNumber = cursor.getInt(phoneNumberColumnIndex);
+
+                // Display the values from each column of the current row in the cursor in the TextView
+                displayView.append(("\n" + currentID + " - " +
+                        currentProductName + " - " +
+                        currentPrice + " - " +
+                        currentStock + " - " +
+                        currentQuantity + " - " +
+                        currentSupplierName + " - " +
+                        currentPhoneNumber ));
+            }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.

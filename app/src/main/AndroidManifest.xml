@@ -10,16 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CatalogActivity">
-
-        </activity>
-        <activity android:name=".EditActivity"
-            android:label="edit"
-            android:parentActivityName="com.example.android.inventoryapp.CatalogActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".EditActivity"
+            android:label="edit"
+            android:parentActivityName="com.example.android.inventoryapp.CatalogActivity">
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.inventoryapp.CatalogActivity" />
