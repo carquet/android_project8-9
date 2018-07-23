@@ -24,6 +24,7 @@ public class CatalogActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
+        //Fb button with explicit intent to the edit page
         FloatingActionButton fb = findViewById(R.id.fab);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,6 +66,7 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
+    /** INSERT DUMMY DATA*/
     private void insertBooks(){
 
         //put the database into writable mode
@@ -84,6 +86,7 @@ public class CatalogActivity extends AppCompatActivity {
 
     }
 
+    /**MENU methods */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_catalog.xml file.

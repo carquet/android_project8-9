@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Inventory App</string>
+
+    <!-- Label for overview category of attributes in the editor [CHAR LIMIT=30] -->
+    <string name="textview_overview">Overview</string>
+
+    <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
+    <string name="hint_product_name">Product Name</string>
+
+    <!-- Label for the supplier name in the editor [CHAR LIMIT=30] -->
+    <string name="hint_supplier_name">Supplier Name</string>
+
+    <!-- Label for the supplier phone number in the editor [CHAR LIMIT=30] -->
+    <string name="hint_supplier_phonenumber">555 555 555</string>
+
+    <!-- Label for the in stock spinner  in the editor [CHAR LIMIT=30] -->
+    <string name="textview_in_stock">In Stock</string>
+
+    <!-- Label for the price in the editor [CHAR LIMIT=30] -->
+    <string name="textview_price">price</string>
+
+    <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
+    <string name="hint_price">price</string>
+
+    <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
+    <string name="currency_price">€</string>
+
+    <!-- Label for the quantity in the editor [CHAR LIMIT=30] -->
+    <string name="textview_quantity">Quantity</string>
+    <string name="hint_quantity">quantity</string>
+
 </resources>
