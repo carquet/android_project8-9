@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- These are the options displayed in the in Stock drop-down Spinner -->
+    <string-array name="in_stock_array">
+        <item>@string/in_stock</item>
+        <item>@string/not_in_stock</item>
+    </string-array>
+</resources>
