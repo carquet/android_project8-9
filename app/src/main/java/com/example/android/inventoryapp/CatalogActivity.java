@@ -1,12 +1,15 @@
 package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.InventoryDbHelper;
@@ -20,6 +23,15 @@ public class CatalogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
+
+        FloatingActionButton fb = findViewById(R.id.fab);
+        fb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent editIntent = new Intent(CatalogActivity.this, EditActivity.class);
+                startActivity(editIntent);
+            }
+        });
 
         // To access our database, we instantiate our subclass of SQLiteOpenHelper
         // and pass the context, which is the current activity.
