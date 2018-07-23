@@ -38,6 +38,7 @@ public class CatalogActivity extends AppCompatActivity {
         // and pass the context, which is the current activity.
         mDbHelper = new InventoryDbHelper(this);
 
+        displayDatabaseInfo();
     }
 
     @Override
@@ -104,11 +105,11 @@ public class CatalogActivity extends AppCompatActivity {
                 // at the current row the cursor is on.
                 int currentID = cursor.getInt(idColumnIndex);
                 String currentProductName = cursor.getString(productNameColumnIndex);
-                String currentPrice = cursor.getString(priceColumnIndex);
+                int currentPrice = cursor.getInt(priceColumnIndex);
                 int currentStock = cursor.getInt(stockColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
-                int currentSupplierName = cursor.getInt(supplierNameColumnIndex);
-                int currentPhoneNumber = cursor.getInt(phoneNumberColumnIndex);
+                String currentSupplierName = cursor.getString(supplierNameColumnIndex);
+                String currentPhoneNumber = cursor.getString(phoneNumberColumnIndex);
 
                 // Display the values from each column of the current row in the cursor in the TextView
                 displayView.append(("\n" + currentID + " - " +
