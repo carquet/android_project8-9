@@ -18,6 +18,7 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
 public class CatalogActivity extends AppCompatActivity {
     InventoryDbHelper mDbHelper;
     SQLiteDatabase mInventoryDb;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +48,8 @@ public class CatalogActivity extends AppCompatActivity {
     displayDatabaseInfo();
     }
 
-
-    /**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the books database.
-     */
-    private void displayDatabaseInfo() {
+    /**method that returns a cursor with all columns*/
+    private Cursor queryAllData(){
         //open your databse to read it.
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
@@ -68,7 +65,7 @@ public class CatalogActivity extends AppCompatActivity {
                 BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
         // Perform a query on the pets table
-        Cursor cursor = db.query(
+        return db.query(
                 BookEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 null,                  // The columns for the WHERE clause
@@ -77,6 +74,16 @@ public class CatalogActivity extends AppCompatActivity {
                 null,                  // Don't filter by row groups
                 null);                   // The sort order
 
+    }
+    /**
+     * Temporary helper method to display information in the onscreen TextView about the state of
+     * the books database.
+     */
+    private void displayDatabaseInfo() {
+        //calls the method that read the information on the DB
+        cursor = queryAllData();
+
+        //fetch the TextView where the information will be displayed
         TextView displayView = (TextView) findViewById(R.id.text_view_books);
 
         try {
