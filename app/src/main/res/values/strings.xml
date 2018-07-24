@@ -33,7 +33,11 @@
     <string name="textview_quantity">Quantity</string>
     <string name="hint_quantity">quantity</string>
 
-
+    <!-- MENUS OPTIONS-->
+    <!-- Catalog menu -->
+    <string name="action_insert_dummy_data">insert dummy data</string>
+    <!--edit menu-->
     <string name="action_save">save</string>
+
 
 </resources>

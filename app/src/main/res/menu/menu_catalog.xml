@@ -6,7 +6,7 @@
 
     <item
         android:id="@+id/action_insert_dummy_data"
-        android:title="insert data"
+        android:title="@string/action_insert_dummy_data"
         app:showAsAction="never" />
 
 </menu>
