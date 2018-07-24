@@ -150,6 +150,12 @@
                 android:inputType="number"
                 style="@style/EditorFieldStyle" />
 
+            <Button
+                android:id="@+id/button_increase"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_alignRight="@+id/edit_quantity" />
+
         </RelativeLayout>
 
     </LinearLayout> <!--end of PRICE FIELD-->
