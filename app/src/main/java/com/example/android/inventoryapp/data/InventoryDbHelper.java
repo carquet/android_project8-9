@@ -18,8 +18,8 @@ package com.example.android.inventoryapp.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
+import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
 
 /**
@@ -29,7 +29,9 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
-    /** Name of the database file */
+    /**
+     * Name of the database file
+     */
     private static final String DATABASE_NAME = "inventory.db";
 
     /**
@@ -53,14 +55,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // Create a String that contains the SQL statement to create the BOOKS table
-        String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BookEntry.TABLE_NAME + " ("
-                + BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + BookEntry.COLUMN__PRODUCT_NAME + " TEXT NOT NULL, "
-                + BookEntry.COLUMN_PRICE + " REAL, "
-                + BookEntry.COLUMN_IN_STOCK + " INTEGER NOT NULL, "
-                + BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
-                + BookEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "
-                + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL);";
+        String SQL_CREATE_BOOKS_TABLE = "CREATE TABLE " + BookEntry.TABLE_NAME + " (" + BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + BookEntry.COLUMN__PRODUCT_NAME + " TEXT NOT NULL, " + BookEntry.COLUMN_PRICE + " REAL, " + BookEntry.COLUMN_IN_STOCK + " INTEGER NOT NULL, " + BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, " + BookEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, " + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " TEXT NOT NULL);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_BOOKS_TABLE);

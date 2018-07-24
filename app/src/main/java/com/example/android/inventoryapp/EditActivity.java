@@ -21,7 +21,9 @@ import com.example.android.inventoryapp.data.InventoryDbHelper;
 import org.w3c.dom.Text;
 
 
-/** allows user to create or update a new product from the inventory */
+/**
+ * allows user to create or update a new product from the inventory
+ */
 public class EditActivity extends AppCompatActivity {
 
     private EditText productNameEditText;
@@ -37,6 +39,7 @@ public class EditActivity extends AppCompatActivity {
      * {@link BookEntry#IN_STOCK}, {@link BookEntry#NOT_IN_STOCK}
      */
     private int stock = BookEntry.NOT_IN_STOCK;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +63,7 @@ public class EditActivity extends AppCompatActivity {
     private void setupSpinner() {
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
-        ArrayAdapter stockSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.in_stock_array, android.R.layout.simple_spinner_item);
+        ArrayAdapter stockSpinnerAdapter = ArrayAdapter.createFromResource(this, R.array.in_stock_array, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
         stockSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
@@ -76,7 +78,7 @@ public class EditActivity extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.in_stock))) {
-                         stock = BookEntry.IN_STOCK;
+                        stock = BookEntry.IN_STOCK;
                     } else {
                         stock = BookEntry.NOT_IN_STOCK;
                     }
@@ -134,7 +136,7 @@ public class EditActivity extends AppCompatActivity {
         //create the DB helper
         InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
         //put the database into writable mode
-        SQLiteDatabase mInventoryDb= mDbHelper.getWritableDatabase();
+        SQLiteDatabase mInventoryDb = mDbHelper.getWritableDatabase();
 
         //you create an object  of ContentValues.
         ContentValues values = new ContentValues();

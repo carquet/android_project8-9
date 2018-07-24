@@ -44,29 +44,23 @@ public class CatalogActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-    super.onStart();
-    displayDatabaseInfo();
+        super.onStart();
+        displayDatabaseInfo();
     }
 
-    /**method that returns a cursor with all columns*/
-    private Cursor queryAllData(){
+    /**
+     * method that returns a cursor with all columns
+     */
+    private Cursor queryAllData() {
         //open your databse to read it.
         SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN__PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_IN_STOCK,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN__PRODUCT_NAME, BookEntry.COLUMN_PRICE, BookEntry.COLUMN_IN_STOCK, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
         // Perform a query on the pets table
-        return db.query(
-                BookEntry.TABLE_NAME,   // The table to query
+        return db.query(BookEntry.TABLE_NAME,   // The table to query
                 projection,            // The columns to return
                 null,                  // The columns for the WHERE clause
                 null,                  // The values for the WHERE clause
@@ -75,6 +69,7 @@ public class CatalogActivity extends AppCompatActivity {
                 null);                   // The sort order
 
     }
+
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the books database.
@@ -89,13 +84,7 @@ public class CatalogActivity extends AppCompatActivity {
         try {
             // Create a header in the Text View
             displayView.setText("The books table contains " + cursor.getCount() + " books.\n\n");
-            displayView.append(BookEntry._ID + " - " +
-                            BookEntry.COLUMN__PRODUCT_NAME + " - " +
-                            BookEntry.COLUMN_PRICE + " - " +
-                            BookEntry.COLUMN_IN_STOCK + " - " +
-                            BookEntry.COLUMN_QUANTITY + " - " +
-                            BookEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
+            displayView.append(BookEntry._ID + " - " + BookEntry.COLUMN__PRODUCT_NAME + " - " + BookEntry.COLUMN_PRICE + " - " + BookEntry.COLUMN_IN_STOCK + " - " + BookEntry.COLUMN_QUANTITY + " - " + BookEntry.COLUMN_SUPPLIER_NAME + " - " + BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER + "\n");
 
             // Figure out the index of each column
             int idColumnIndex = cursor.getColumnIndex(BookEntry._ID);
@@ -119,13 +108,7 @@ public class CatalogActivity extends AppCompatActivity {
                 String currentPhoneNumber = cursor.getString(phoneNumberColumnIndex);
 
                 // Display the values from each column of the current row in the cursor in the TextView
-                displayView.append(("\n" + currentID + " - " +
-                        currentProductName + " - " +
-                        currentPrice + " - " +
-                        currentStock + " - " +
-                        currentQuantity + " - " +
-                        currentSupplierName + " - " +
-                        currentPhoneNumber ));
+                displayView.append(("\n" + currentID + " - " + currentProductName + " - " + currentPrice + " - " + currentStock + " - " + currentQuantity + " - " + currentSupplierName + " - " + currentPhoneNumber));
             }
         } finally {
             // Always close the cursor when you're done reading from it. This releases all its
@@ -134,8 +117,10 @@ public class CatalogActivity extends AppCompatActivity {
         }
     }
 
-    /** INSERT DUMMY DATA*/
-    private void insertBooks(){
+    /**
+     * INSERT DUMMY DATA
+     */
+    private void insertBooks() {
 
         //put the database into writable mode
         mInventoryDb = mDbHelper.getWritableDatabase();
@@ -154,7 +139,9 @@ public class CatalogActivity extends AppCompatActivity {
 
     }
 
-    /**MENU methods */
+    /**
+     * MENU methods
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_catalog.xml file.
