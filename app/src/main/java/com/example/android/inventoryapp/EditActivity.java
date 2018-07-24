@@ -13,9 +13,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
+
+import org.w3c.dom.Text;
 
 
 /** allows user to create or update a new product from the inventory */
@@ -27,6 +30,7 @@ public class EditActivity extends AppCompatActivity {
     private Spinner inStockSpinner;
     private EditText priceEditText;
     private EditText quantityEdittext;
+
 
     /**
      * Gender of the pet. The possible valid values are in the BookContract.java file:
@@ -45,7 +49,6 @@ public class EditActivity extends AppCompatActivity {
         inStockSpinner = (Spinner) findViewById(R.id.spinner_in_stock);
         priceEditText = (EditText) findViewById(R.id.edit_price);
         quantityEdittext = (EditText) findViewById(R.id.edit_quantity);
-
 
         setupSpinner();
 
@@ -122,7 +125,7 @@ public class EditActivity extends AppCompatActivity {
         // Use trim to eliminate leading or trailing white space
         String productNameString = productNameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
-        int price = Integer.parseInt(priceString);
+        float price = Float.parseFloat(priceString);
         String quantityString = quantityEdittext.getText().toString().trim();
         int quantity = Integer.parseInt(quantityString);
         String supplierNameString = supplierNameEditText.getText().toString().trim();

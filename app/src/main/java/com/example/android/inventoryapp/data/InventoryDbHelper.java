@@ -56,7 +56,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
         String SQL_CREATE_BOOKS_TABLE =  "CREATE TABLE " + BookEntry.TABLE_NAME + " ("
                 + BookEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + BookEntry.COLUMN__PRODUCT_NAME + " TEXT NOT NULL, "
-                + BookEntry.COLUMN_PRICE + " INTEGER, "
+                + BookEntry.COLUMN_PRICE + " REAL, "
                 + BookEntry.COLUMN_IN_STOCK + " INTEGER NOT NULL, "
                 + BookEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0, "
                 + BookEntry.COLUMN_SUPPLIER_NAME + " TEXT NOT NULL, "

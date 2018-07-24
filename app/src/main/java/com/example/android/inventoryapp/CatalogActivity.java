@@ -112,7 +112,7 @@ public class CatalogActivity extends AppCompatActivity {
                 // at the current row the cursor is on.
                 int currentID = cursor.getInt(idColumnIndex);
                 String currentProductName = cursor.getString(productNameColumnIndex);
-                int currentPrice = cursor.getInt(priceColumnIndex);
+                float currentPrice = cursor.getFloat(priceColumnIndex);
                 int currentStock = cursor.getInt(stockColumnIndex);
                 int currentQuantity = cursor.getInt(quantityColumnIndex);
                 String currentSupplierName = cursor.getString(supplierNameColumnIndex);
@@ -143,7 +143,7 @@ public class CatalogActivity extends AppCompatActivity {
         //you create an object  of ContentValues.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN__PRODUCT_NAME, "English File");
-        values.put(BookEntry.COLUMN_PRICE, 22);
+        values.put(BookEntry.COLUMN_PRICE, 22.22);
         values.put(BookEntry.COLUMN_IN_STOCK, 1);
         values.put(BookEntry.COLUMN_QUANTITY, 5);
         values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Midleton");
