@@ -2,6 +2,7 @@ package com.example.android.inventoryapp.data;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -11,7 +12,32 @@ public class InventoryProvider extends ContentProvider {
 
     /** Tag for the log messages */
     public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
+
+    /** initialize the dbhelper*/
     private InventoryDbHelper dbHelper;
+
+    /** URI matcher code for the content URI for the books table */
+    private static final int BOOKS = 100;
+
+    /** URI matcher code for the content URI for a single book in the books table */
+    private static final int BOOK_ID = 101;
+
+    /**
+     * UriMatcher object to match a content URI to a corresponding code.
+     * The input passed into the constructor represents the code to return for the root URI.
+     * It's common to use NO_MATCH as the input for this case.
+     */
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    // Static initializer. This is run the first time anything is called from this class.
+    static {
+        // The calls to addURI() go here, for all of the content URI patterns that the provider
+        // should recognize. All paths added to the UriMatcher have a corresponding code to return
+        // when a match is found.
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS );
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS+"/#", BOOK_ID);
+    }
+
     /**
      * Initialize the provider and the database helper object.
      */
