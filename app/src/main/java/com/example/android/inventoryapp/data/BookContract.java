@@ -1,13 +1,37 @@
 package com.example.android.inventoryapp.data;
 
+import android.net.Uri;
 import android.provider.BaseColumns;
 
 //this should be in a data package inside the app package
 public final class BookContract {
+    /**
+     * The "Content authority" is a name for the entire content provider, similar to the
+     * relationship between a domain name and its website.  A convenient string to use for the
+     * content authority is the package name for the app, which is guaranteed to be unique on the
+     * device.
+     */
+    public static final String CONTENT_AUTHORITY = "com.example.android.inventoryapp";
+
+    /**
+     * Use CONTENT_AUTHORITY to create the base of all URI's which apps will use to contact
+     * the content provider.
+     */
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
+    /**
+     * Possible path (appended to base content URI for possible URI's)
+     * For instance, content://com.example.android.inventoryapp/books/ is a valid path for
+     * looking at book data. content://com.example.android.inventoryapp/library/ will fail,
+     * as the ContentProvider hasn't been given any information on what to do with "library".
+     */
+    public static final String PATH_BOOKS = "books";
 
     //CREATE TABLE books(product_name, price, in_stock,quantity,supplier_name,supplier_phone_number)
 
     public static abstract class BookEntry implements BaseColumns {
+        /** The content URI to access the book data in the provider */
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         public static final String TABLE_NAME = "books";
         public static final String COLUMN__PRODUCT_NAME = "product_name";
