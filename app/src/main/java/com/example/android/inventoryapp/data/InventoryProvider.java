@@ -1,12 +1,17 @@
 package com.example.android.inventoryapp.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import java.security.Provider;
+
+import com.example.android.inventoryapp.data.BookContract.BookEntry;
+
 
 public class InventoryProvider extends ContentProvider {
 
@@ -55,7 +60,35 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        return null;
+
+        //open the database in reading mode
+        SQLiteDatabase database = dbHelper.getReadableDatabase();
+
+        //this is the cursor that will return the result of the method in each case
+        Cursor cursor;
+
+        //adapt the results according to the uri sent
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                cursor = database.query(BookEntry.TABLE_NAME, projection, null, null, null, null, null);
+                break;
+            case BOOK_ID:
+                // For every "?" in the selection, we need to have an element in the selection
+                // arguments that will fill in the "?". Since we have 1 question mark in the
+                // selection, we have 1 String in the selection arguments' String array.
+                selection = BookEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                // This will perform a query on the books table where the _id equals a integer given to return a
+                // Cursor containing that row of the table.
+                cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+                break;
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+
+        return cursor;
     }
 
     /**
