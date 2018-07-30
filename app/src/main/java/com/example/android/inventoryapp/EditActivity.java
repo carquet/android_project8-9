@@ -2,6 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 import com.example.android.inventoryapp.data.InventoryDbHelper;
@@ -134,9 +136,9 @@ public class EditActivity extends AppCompatActivity {
         String supplierPhoneNumber = supplierPhoneNumberEdittext.getText().toString().trim();
 
         //create the DB helper
-        InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
+        //InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
         //put the database into writable mode
-        SQLiteDatabase mInventoryDb = mDbHelper.getWritableDatabase();
+        //SQLiteDatabase mInventoryDb = mDbHelper.getWritableDatabase();
 
         //you create an object  of ContentValues.
         ContentValues values = new ContentValues();
@@ -148,6 +150,14 @@ public class EditActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
 
         //insert a new roa in the table with a specific ID
-        long newRowId = mInventoryDb.insert(BookEntry.TABLE_NAME, null, values);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the row ID is -1, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.InventoryDbHelper;
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
@@ -117,7 +119,7 @@ public class CatalogActivity extends AppCompatActivity {
     private void insertBooks() {
 
         //put the database into writable mode
-        mInventoryDb = mDbHelper.getWritableDatabase();
+        //mInventoryDb = mDbHelper.getWritableDatabase();
 
         //you create an object  of ContentValues.
         ContentValues values = new ContentValues();
@@ -129,7 +131,16 @@ public class CatalogActivity extends AppCompatActivity {
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "555-345-234");
 
         //insert a new roa in the table with a specific ID
-        long newRowId = mInventoryDb.insert(BookEntry.TABLE_NAME, null, values);
+        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+
+        // Show a toast message depending on whether or not the insertion was successful
+        if (newUri == null) {
+            // If the row ID is -1, then there was an error with insertion.
+            Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+        }
 
     }
 

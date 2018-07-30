@@ -39,5 +39,10 @@
     <!--edit menu-->
     <string name="action_save">save</string>
 
+    <!-- LOG -->
+    <string name="error_log_provider_insert_one_book">Failed to insert row for</string>
+    <string name="editor_insert_book_failed">Fail to save in the database</string>
+    <string name="editor_insert_book_successful">Your book has been successfully saved</string>
+
 
 </resources>

@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 import java.security.Provider;
 
@@ -96,7 +97,32 @@ public class InventoryProvider extends ContentProvider {
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+        //adapt the results according to the uri sent
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return insertBooks(uri, contentValues);
+            default:
+                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+        }
+    }
+
+    private Uri insertBooks(Uri uri, ContentValues contentValues) {
+        //open the DB in writable mode
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        // Insert the new book with the given values
+        long id = database.insert(BookEntry.TABLE_NAME, null, contentValues);
+        // If the ID is -1, then the insertion failed. Log an error and return null.
+        if (id == -1) {
+            Log.e(LOG_TAG, "Failed to insert row for " + uri);
+            return null;
+        }
+
+        // Once we know the ID of the new row in the table,
+        // return the new URI with the ID appended to the end of it
+        return ContentUris.withAppendedId(uri, id);
+
     }
 
     /**
