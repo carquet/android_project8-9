@@ -216,8 +216,23 @@ public class InventoryProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        // Get writeable database
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+        //since there is no sanity check and no information to insert, the code is kept here instead of two separate methods
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            case BOOK_ID:
+                // extract the ID from the Uri
+                selection = BookEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("deletion  is not supported for " + uri);
+        }
     }
+
 
     /**
      * Returns the MIME type of data for the content URI.
