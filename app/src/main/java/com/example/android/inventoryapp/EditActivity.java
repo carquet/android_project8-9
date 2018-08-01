@@ -129,35 +129,36 @@ public class EditActivity extends AppCompatActivity {
         // Use trim to eliminate leading or trailing white space
         String productNameString = productNameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
-        float price = Float.parseFloat(priceString);
         String quantityString = quantityEdittext.getText().toString().trim();
-        int quantity = Integer.parseInt(quantityString);
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEdittext.getText().toString().trim();
 
-        //create the DB helper
-        //InventoryDbHelper mDbHelper = new InventoryDbHelper(this);
-        //put the database into writable mode
-        //SQLiteDatabase mInventoryDb = mDbHelper.getWritableDatabase();
+        //check whether all the information required is entered
+        if (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString))){
+            Toast.makeText(this, "some information is missing", Toast.LENGTH_SHORT).show();
 
-        //you create an object  of ContentValues.
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
-        values.put(BookEntry.COLUMN_PRICE, price);
-        values.put(BookEntry.COLUMN_IN_STOCK, stock);
-        values.put(BookEntry.COLUMN_QUANTITY, quantity);
-        values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+        }else {
+            ContentValues values = new ContentValues();
+            values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
+            float price = Float.parseFloat(priceString);
+            values.put(BookEntry.COLUMN_PRICE, price);
+            int quantity = Integer.parseInt(quantityString);
+            values.put(BookEntry.COLUMN_QUANTITY, quantity);
+            values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
+            values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+            values.put(BookEntry.COLUMN_IN_STOCK, stock);
 
-        //insert a new roa in the table with a specific ID
-        Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+            //insert a new row in the table with a specific ID
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newUri == null) {
+                // If the row ID is -1, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+            }
         }
+
     }
 }

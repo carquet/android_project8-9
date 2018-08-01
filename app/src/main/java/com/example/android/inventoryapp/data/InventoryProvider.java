@@ -108,9 +108,32 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private Uri insertBooks(Uri uri, ContentValues contentValues) {
+
+
+        // SANITY CHECK: checks that the value entered by the user are valid.
+        String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
+        if (productName == null || productName.isEmpty()) {
+            throw new IllegalArgumentException("the product cannot be null");
+        }
+
+        Integer inStock = contentValues.getAsInteger(BookEntry.COLUMN_IN_STOCK);
+        if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)){
+            throw new IllegalArgumentException("The product requires to be either in stock or not in stock");
+        }
+
+        Integer productPrice = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
+        if ((productPrice == null) || (productPrice < 0)){
+            throw new IllegalArgumentException("the price needs to be a positive number");
+        }
+
+        Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
+        if (quantity < 0){
+            throw new IllegalArgumentException("the quantity needs to be a positive number");
+        }
+
+
         //open the DB in writable mode
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-
         // Insert the new book with the given values
         long id = database.insert(BookEntry.TABLE_NAME, null, contentValues);
         // If the ID is -1, then the insertion failed. Log an error and return null.

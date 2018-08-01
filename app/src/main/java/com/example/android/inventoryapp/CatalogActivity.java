@@ -118,9 +118,6 @@ public class CatalogActivity extends AppCompatActivity {
      */
     private void insertBooks() {
 
-        //put the database into writable mode
-        //mInventoryDb = mDbHelper.getWritableDatabase();
-
         //you create an object  of ContentValues.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN__PRODUCT_NAME, "English File");
