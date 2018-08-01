@@ -109,7 +109,6 @@ public class InventoryProvider extends ContentProvider {
 
     private Uri insertBooks(Uri uri, ContentValues contentValues) {
 
-
         // SANITY CHECK: checks that the value entered by the user are valid.
         String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
         if (productName == null || productName.isEmpty()) {
@@ -126,11 +125,12 @@ public class InventoryProvider extends ContentProvider {
             throw new IllegalArgumentException("the price needs to be a positive number");
         }
 
-        Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
+        Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
         if (quantity < 0){
             throw new IllegalArgumentException("the quantity needs to be a positive number");
         }
 
+        // No need to check the supplier name and its phone number, any value is valid (including null).
 
         //open the DB in writable mode
         SQLiteDatabase database = dbHelper.getWritableDatabase();
@@ -153,7 +153,62 @@ public class InventoryProvider extends ContentProvider {
      */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        switch (match){
+            case BOOKS:
+                return updateBook(uri, contentValues, selection, selectionArgs);
+            case BOOK_ID:
+                //Extract the ID form the uri
+                selection = BookEntry._ID + "+?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                return updateBook(uri, contentValues, selection, selectionArgs);
+            default:
+                throw new IllegalArgumentException("Updateion is not supported for " + uri);
+
+        }
+    }
+
+    private int updateBook(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        // SANITY CHECK: checks that the value entered by the user are valid.
+        if(contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)){
+            String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
+            if (productName == null || productName.isEmpty()) {
+                throw new IllegalArgumentException("the product cannot be null");
+            }
+        }
+
+        if(contentValues.containsKey(BookEntry.COLUMN_IN_STOCK)){
+            Integer inStock = contentValues.getAsInteger(BookEntry.COLUMN_IN_STOCK);
+            if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)){
+                throw new IllegalArgumentException("The product requires to be either in stock or not in stock");
+            }
+        }
+
+        if(contentValues.containsKey(BookEntry.COLUMN_PRICE)){
+            Integer productPrice = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
+            if ((productPrice == null) || (productPrice < 0)){
+                throw new IllegalArgumentException("the price needs to be a positive number");
+            }
+        }
+
+        if(contentValues.containsKey(BookEntry.COLUMN_QUANTITY)){
+            Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
+            if (quantity < 0){
+                throw new IllegalArgumentException("the quantity needs to be a positive number");
+            }
+        }
+
+        if(contentValues.size() == 0){
+            return 0;
+        }
+        // No need to check the supplier name and its phone number, any value is valid (including null).
+
+        //open the DB in writable mode
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+
+        // Returns the number of database rows affected by the update statement
+        return database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
     }
 
     /**

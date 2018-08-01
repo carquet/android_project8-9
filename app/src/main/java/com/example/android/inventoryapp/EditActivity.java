@@ -136,7 +136,6 @@ public class EditActivity extends AppCompatActivity {
         //check whether all the information required is entered
         if (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString))){
             Toast.makeText(this, "some information is missing", Toast.LENGTH_SHORT).show();
-
         }else {
             ContentValues values = new ContentValues();
             values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
