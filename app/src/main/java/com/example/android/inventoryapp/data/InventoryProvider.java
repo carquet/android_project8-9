@@ -216,7 +216,7 @@ public class InventoryProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Get writeable database
+        // Get writable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         //since there is no sanity check and no information to insert, the code is kept here instead of two separate methods
         final int match = sUriMatcher.match(uri);
@@ -237,8 +237,19 @@ public class InventoryProvider extends ContentProvider {
     /**
      * Returns the MIME type of data for the content URI.
      */
+    /**
+     * Returns the MIME type of data for the content URI.
+     */
     @Override
     public String getType(Uri uri) {
-        return null;
+        final int match = sUriMatcher.match(uri);
+        switch (match) {
+            case BOOKS:
+                return BookEntry.CONTENT_LIST_TYPE;
+            case BOOK_ID:
+                return BookEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
+        }
     }
 }
