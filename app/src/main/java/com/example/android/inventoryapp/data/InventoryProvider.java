@@ -126,7 +126,7 @@ public class InventoryProvider extends ContentProvider {
         }
 
         Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
-        if (quantity < 0){
+        if (quantity == null || quantity < 0){
             throw new IllegalArgumentException("the quantity needs to be a positive number");
         }
 
