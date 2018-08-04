@@ -37,7 +37,7 @@ public class EditActivity extends AppCompatActivity {
 
 
     /**
-     * Gender of the pet. The possible valid values are in the BookContract.java file:
+     * The possible valid values are in the BookContract.java file:
      * {@link BookEntry#IN_STOCK}, {@link BookEntry#NOT_IN_STOCK}
      */
     private int stock = BookEntry.NOT_IN_STOCK;

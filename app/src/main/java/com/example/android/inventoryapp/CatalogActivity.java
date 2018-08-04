@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,7 +75,13 @@ public class CatalogActivity extends AppCompatActivity {
         //calls the method that read the information on the DB
         cursor = queryAllData();
 
-        //fetch the TextView where the information will be displayed
+        ListView booksListView = (ListView) findViewById(R.id.text_view_books);
+
+        BookCursorAdapter cursorAdapter = new BookCursorAdapter(this, cursor);
+
+        booksListView.setAdapter(cursorAdapter);
+
+        /*//fetch the TextView where the information will be displayed
         TextView displayView = (TextView) findViewById(R.id.text_view_books);
 
         try {
@@ -110,7 +117,7 @@ public class CatalogActivity extends AppCompatActivity {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
             cursor.close();
-        }
+        }*/
     }
 
     /**

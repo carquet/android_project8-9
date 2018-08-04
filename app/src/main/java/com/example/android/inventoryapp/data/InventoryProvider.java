@@ -202,7 +202,6 @@ public class InventoryProvider extends ContentProvider {
             return 0;
         }
         // No need to check the supplier name and its phone number, any value is valid (including null).
-
         //open the DB in writable mode
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
