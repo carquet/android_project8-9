@@ -84,11 +84,13 @@ public class InventoryProvider extends ContentProvider {
                 // This will perform a query on the books table where the _id equals a integer given to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-
+        // set the notification on the cursor: it checks wheter there was any change made on the specified uri.
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
@@ -108,6 +110,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private Uri insertBooks(Uri uri, ContentValues contentValues) {
+        Uri insertBooksUri;
 
         // SANITY CHECK: checks that the value entered by the user are valid.
         String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
@@ -140,11 +143,14 @@ public class InventoryProvider extends ContentProvider {
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
+        } else {
+            //notify change
+            insertBooksUri = ContentUris.withAppendedId(uri, id);
+            getContext().getContentResolver().notifyChange(insertBooksUri, null);
+            // Once we know the ID of the new row in the table,
+            // return the new URI with the ID appended to the end of it
+            return insertBooksUri;
         }
-
-        // Once we know the ID of the new row in the table,
-        // return the new URI with the ID appended to the end of it
-        return ContentUris.withAppendedId(uri, id);
 
     }
 
@@ -169,6 +175,8 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private int updateBook(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
+        int updateBookUri;
+
         // SANITY CHECK: checks that the value entered by the user are valid.
         if(contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)){
             String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
@@ -198,16 +206,25 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
+        // No need to check the supplier name and its phone number, any value is valid (including null).
+
+
+       //check that any change has been made
         if(contentValues.size() == 0){
             return 0;
+        } else {
+            //open the DB in writable mode
+            SQLiteDatabase database = dbHelper.getWritableDatabase();
+            //enter the new info
+            updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+            //notify for the front end to update
+            getContext().getContentResolver().notifyChange(uri, null);
+
+            // Returns the number of database rows affected by the update statement
+            return updateBookUri;
         }
-        // No need to check the supplier name and its phone number, any value is valid (including null).
-        //open the DB in writable mode
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
 
 
-        // Returns the number of database rows affected by the update statement
-        return database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
     }
 
     /**
@@ -215,18 +232,30 @@ public class InventoryProvider extends ContentProvider {
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
+        int rowsDeleted;
+
         // Get writable database
         SQLiteDatabase database = dbHelper.getWritableDatabase();
         //since there is no sanity check and no information to insert, the code is kept here instead of two separate methods
         final int match = sUriMatcher.match(uri);
+
+        //match the received uri with a specific action
         switch (match) {
             case BOOKS:
-                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                if(rowsDeleted != 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsDeleted;
             case BOOK_ID:
                 // extract the ID from the Uri
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
+                if (rowsDeleted != 0){
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsDeleted;
             default:
                 throw new IllegalArgumentException("deletion  is not supported for " + uri);
         }
