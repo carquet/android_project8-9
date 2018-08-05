@@ -42,7 +42,12 @@ public class CatalogActivity extends AppCompatActivity {
         // and pass the context, which is the current activity.
         mDbHelper = new InventoryDbHelper(this);
 
-        //displayDatabaseInfo();
+        //SET UP THE EMPTY VIEW
+        //1. Grab the books that is going to be populated by
+        ListView booksListView = findViewById(R.id.text_view_books);
+        //2. set the empty view on the listView
+        View emptyView = findViewById(R.id.empty_view);
+        booksListView.setEmptyView(emptyView);
     }
 
     @Override
