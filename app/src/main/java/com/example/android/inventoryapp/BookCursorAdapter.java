@@ -2,6 +2,7 @@ package com.example.android.inventoryapp;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +15,14 @@ import android.widget.TextView;
  * how to create list items for each row of book data in the {@link Cursor}.
  */
 
-public class BookCursorAdapter extends CursorAdapter{
+public class BookCursorAdapter extends CursorAdapter {
     /**
      * Constructs a new {@link BookCursorAdapter}.
      *
      * @param context The context
-     * @param cursor       The cursor from which to get the data.
+     * @param cursor  The cursor from which to get the data.
      */
-    public BookCursorAdapter(Context context, Cursor cursor){
+    public BookCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 
@@ -55,13 +56,15 @@ public class BookCursorAdapter extends CursorAdapter{
         productNameView.setText(productNameString);
         productPriceView.setText(String.valueOf(productPriceFloat));
         supplierNameView.setText(supplierName);
-        if(stock == 0){
+        if (stock == 0) {
             stockView.setText(R.string.not_in_stock);
-        }else{
+        } else {
             stockView.setText(R.string.in_stock);
         }
         quantityView.setText(String.valueOf(quantity));
         phoneNumberView.setText(supplierPhoneNumber);
 
     }
+
+
 }
