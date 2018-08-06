@@ -47,6 +47,7 @@
     <string name="editor_insert_book_successful">Your book has been successfully saved</string>
     <string name="empty_shelf_message">Oops, looks like the shelf is empty</string>
     <string name="empty_shelf_action">Start your inventory by adding a book</string>
+    <string name="missing_info_for_successful_save">one or more pieces of information is missing</string>
 
 
 </resources>

@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
+import org.w3c.dom.Text;
 
 
 /**
@@ -129,17 +130,23 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
-        //defines an object to put the values
-        ContentValues values = new ContentValues();
-        values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
-        float price = Float.parseFloat(priceString);
-        values.put(BookEntry.COLUMN_PRICE, price);
-        int quantity = Integer.parseInt(quantityString);
-        values.put(BookEntry.COLUMN_QUANTITY, quantity);
-        values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
-        values.put(BookEntry.COLUMN_IN_STOCK, stock);
+        ContentValues values;
 
+        if(TextUtils.isEmpty(productNameString) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))){
+            Toast.makeText(this, getString(R.string.missing_info_for_successful_save), Toast.LENGTH_SHORT).show();
+            return;
+        } else {
+            //defines an object to put the values
+            values = new ContentValues();
+            values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
+            float price = Float.parseFloat(priceString);
+            values.put(BookEntry.COLUMN_PRICE, price);
+            int quantity = Integer.parseInt(quantityString);
+            values.put(BookEntry.COLUMN_QUANTITY, quantity);
+            values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
+            values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+            values.put(BookEntry.COLUMN_IN_STOCK, stock);
+        }
 
         //chekcs if it is a new product or an existing one by checking the existence of the uri
         if (currentUri == null) {
