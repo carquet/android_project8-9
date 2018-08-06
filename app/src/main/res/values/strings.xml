@@ -48,6 +48,9 @@
     <string name="empty_shelf_message">Oops, looks like the shelf is empty</string>
     <string name="empty_shelf_action">Start your inventory by adding a book</string>
     <string name="missing_info_for_successful_save">one or more pieces of information is missing</string>
+    <string name="unsaved_changed_dialog_msg">Oopsy! You haven\'t saved your information. Wanna quit and discard any changes?</string>
+    <string name="discard_msg">discard</string>
+    <string name="keep_editing">keep editing</string>
 
 
 </resources>

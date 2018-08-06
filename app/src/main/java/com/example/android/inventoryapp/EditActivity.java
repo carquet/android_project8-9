@@ -1,8 +1,11 @@
 package com.example.android.inventoryapp;
 
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -13,6 +16,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -46,6 +50,16 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private Spinner inStockSpinner;
 
+    //STEP 1. set up boolean to listen to any changed made and warn users when they leave the edit page
+    private boolean bookHasChanged = false;
+    private View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            bookHasChanged = true;
+            return false;
+        }
+    };
+
 
     /**
      * The possible valid values are in the BookContract.java file:
@@ -78,6 +92,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         inStockSpinner = (Spinner) findViewById(R.id.spinner_in_stock);
         priceEditText = (EditText) findViewById(R.id.edit_price);
         quantityEditText = (EditText) findViewById(R.id.edit_quantity);
+
+        //set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
+        productNameEditText.setOnTouchListener(touchListener);
+        supplierNameEditText.setOnTouchListener(touchListener);
+        supplierPhoneNumberEditText.setOnTouchListener(touchListener);
+        inStockSpinner.setOnTouchListener(touchListener);
+        priceEditText.setOnTouchListener(touchListener);
+        quantityEditText.setOnTouchListener(touchListener);
 
         setupSpinner();
 
@@ -196,9 +218,23 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // Navigate back to parent activity (CatalogActivity)
-                NavUtils.navigateUpFromSameTask(this);
+                //no changes have been made the user can go back
+                if(!bookHasChanged){
+                    NavUtils.navigateUpFromSameTask((EditActivity.this));
+                    return true;
+                }
+
+                //changes have been made, a dialog interface is triggered
+                DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicks "discard"
+                        NavUtils.navigateUpFromSameTask(EditActivity.this);
+                    }
+                };
+                showUnsavedChangesDialog(discardButtonClickListener);
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -274,5 +310,38 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener){
+        AlertDialog.Builder warning = new AlertDialog.Builder(this);
+        warning.setMessage(R.string.unsaved_changed_dialog_msg);
+        warning.setPositiveButton(R.string.discard_msg, discardButtonClickListener);
+        warning.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(dialog != null){
+                    dialog.dismiss();
+                }
+            }
+        });
+        AlertDialog alertDialog = warning.create();
+        alertDialog.show();
+    }
+
+    //When back button is pressed, this method is called and check whether there are unsaved informaion
+    @Override
+    public void onBackPressed(){
+        if(!bookHasChanged){
+            super.onBackPressed();
+            return;
+        }
+        DialogInterface.OnClickListener discardButtonClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //in case of discard, this will finish the activity
+                finish();
+            }
+        };
+        showUnsavedChangesDialog(discardButtonClickListener);
     }
 }
