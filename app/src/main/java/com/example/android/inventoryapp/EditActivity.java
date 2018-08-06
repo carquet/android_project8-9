@@ -46,6 +46,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     //update information loader id
     int UPDATE_LOADER_ID = 2;
 
+    //selected or updated row
     private Uri currentUri;
 
     @Override
@@ -129,7 +130,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
                 // Save books to inventory database
-                insert();
+                save();
                 // Exit activity
                 finish();
                 return true;
@@ -142,7 +143,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    private void insert() {
+    private void save() {
 
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
@@ -152,11 +153,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
-        //check whether all the information required is entered
-        if (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString))){
-            Toast.makeText(this, "some information is missing", Toast.LENGTH_SHORT).show();
-        }else {
-            ContentValues values = new ContentValues();
+            //defines an object to put the values
+        ContentValues values = new ContentValues();
             values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
             float price = Float.parseFloat(priceString);
             values.put(BookEntry.COLUMN_PRICE, price);
@@ -166,6 +164,10 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
             values.put(BookEntry.COLUMN_IN_STOCK, stock);
 
+
+        //chekcs if it is a new product or an existing one by checking the existence of the uri
+        if (currentUri == null) {
+            //check whether all the information required is entered
             //insert a new row in the table with a specific ID
             Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
             // Show a toast message depending on whether or not the insertion was successful
@@ -176,9 +178,22 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
                 Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
             }
-        }
 
+        }else{
+            //insert a new row in the table with a specific ID
+            int update = getContentResolver().update(currentUri, values, null, null);
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            if(update == 0){
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+            }else
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+
+        }
     }
+
+
+
+
 
 
     /**

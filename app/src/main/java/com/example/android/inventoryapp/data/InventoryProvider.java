@@ -212,17 +212,21 @@ public class InventoryProvider extends ContentProvider {
        //NOTIFY: checks that any change has been made
         if(contentValues.size() == 0){
             return 0;
-        } else {
-            //open the DB in writable mode
-            SQLiteDatabase database = dbHelper.getWritableDatabase();
-            //enter the new info
-            updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
-            //notify for the front end to update
-            getContext().getContentResolver().notifyChange(uri, null);
-
-            // Returns the number of database rows affected by the update statement
-            return updateBookUri;
         }
+
+        //open the DB in writable mode
+        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        //enter the new info
+        updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+
+        if(updateBookUri != 0) {//notify for the front end to update
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        // Returns the number of database rows affected by the update statement
+        return updateBookUri;
+
 
 
     }
