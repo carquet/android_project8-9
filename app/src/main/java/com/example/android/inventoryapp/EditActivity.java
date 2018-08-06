@@ -1,7 +1,11 @@
 package com.example.android.inventoryapp;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -14,26 +18,23 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-import com.example.android.inventoryapp.data.InventoryDbHelper;
 
-import org.w3c.dom.Text;
 
 
 /**
  * allows user to create or update a new product from the inventory
  */
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private EditText productNameEditText;
     private EditText supplierNameEditText;
-    private EditText supplierPhoneNumberEdittext;
+    private EditText supplierPhoneNumberEditText;
     private Spinner inStockSpinner;
     private EditText priceEditText;
-    private EditText quantityEdittext;
+    private EditText quantityEditText;
 
 
     /**
@@ -42,20 +43,38 @@ public class EditActivity extends AppCompatActivity {
      */
     private int stock = BookEntry.NOT_IN_STOCK;
 
+    //update information loader id
+    int UPDATE_LOADER_ID = 2;
+
+    private Uri currentUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        //getting the intent from catalogue activity to update a product from the db
+        Intent intent = getIntent();
+        currentUri = intent.getData();
+        //check if there is a uri in the intent
+        if(currentUri == null){
+            setTitle(getString(R.string.edit_activity_add_new_product));
+        }else{
+            setTitle(getString(R.string.edit_activity_update_existing_product));
+            getLoaderManager().initLoader(UPDATE_LOADER_ID, null, this);
+        }
 
         // Find all relevant views that we will need to read user input from
         productNameEditText = (EditText) findViewById(R.id.edit_product_name);
         supplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
-        supplierPhoneNumberEdittext = (EditText) findViewById(R.id.edit_supplier_phone_number);
+        supplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
         inStockSpinner = (Spinner) findViewById(R.id.spinner_in_stock);
         priceEditText = (EditText) findViewById(R.id.edit_price);
-        quantityEdittext = (EditText) findViewById(R.id.edit_quantity);
+        quantityEditText = (EditText) findViewById(R.id.edit_quantity);
 
         setupSpinner();
+
+
+
 
     }
 
@@ -129,9 +148,9 @@ public class EditActivity extends AppCompatActivity {
         // Use trim to eliminate leading or trailing white space
         String productNameString = productNameEditText.getText().toString().trim();
         String priceString = priceEditText.getText().toString().trim();
-        String quantityString = quantityEdittext.getText().toString().trim();
+        String quantityString = quantityEditText.getText().toString().trim();
         String supplierNameString = supplierNameEditText.getText().toString().trim();
-        String supplierPhoneNumber = supplierPhoneNumberEdittext.getText().toString().trim();
+        String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
         //check whether all the information required is entered
         if (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString))){
@@ -158,6 +177,78 @@ public class EditActivity extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
             }
         }
+
+    }
+
+
+    /**
+     * LOADER to communicate with the database and display information to be updated
+     */
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {BookEntry._ID,
+                BookEntry.COLUMN__PRODUCT_NAME,
+                BookEntry.COLUMN_PRICE,
+                BookEntry.COLUMN_IN_STOCK,
+                BookEntry.COLUMN_QUANTITY,
+                BookEntry.COLUMN_SUPPLIER_NAME,
+                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+
+
+        //this loader will execute the content provider 's query method in the background.
+        // Now create and return a CursorLoader that will take care of
+        // creating a Cursor for the data being displayed.
+        return new CursorLoader(this,
+                currentUri,             //the specific uri called
+                projection,             //the column for the WHERE cl
+                null,
+                null,
+                null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursorData) {
+        if (cursorData.moveToFirst()){
+            int productColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN__PRODUCT_NAME);
+            int priceColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_PRICE);
+            int stockColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_IN_STOCK);
+            int quantityColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_QUANTITY);
+            int supplierColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_SUPPLIER_NAME);
+            int phoneColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+
+            String product = cursorData.getString(productColumnIndex);
+            float priceFloat = cursorData.getFloat(priceColumnIndex);
+            int stock = cursorData.getInt(stockColumnIndex);
+            int quantityInt = cursorData.getInt(quantityColumnIndex);
+            String supplier = cursorData.getString(supplierColumnIndex);
+            String phoneNumber = cursorData.getString(phoneColumnIndex);
+
+            //display information from the current product
+            productNameEditText.setText(product);
+            supplierNameEditText.setText(supplier);
+            supplierPhoneNumberEditText.setText(phoneNumber);
+            priceEditText.setText(String.valueOf(priceFloat));
+            quantityEditText.setText(String.valueOf(quantityInt));
+            switch (stock) {
+                case BookEntry.IN_STOCK:
+                    inStockSpinner.setSelection(0);
+                    break;
+                case BookEntry.NOT_IN_STOCK:
+                    inStockSpinner.setSelection(1);
+                    break;
+                default:
+                    inStockSpinner.setSelection(0);
+                    break;
+
+            }
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
 
     }
 }

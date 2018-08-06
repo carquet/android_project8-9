@@ -29,19 +29,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/empty_shelf"
-            android:text="Oops, looks like the shelf is empty" />
+            android:text="@string/empty_shelf_message" />
 
         <TextView
             android:id="@+id/empty_shelf_action_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/empty_shelf_text"
-            android:text="Start your inventory by adding a book" />
+            android:text="@string/empty_shelf_action" />
     </RelativeLayout>
 
     <ListView
         android:id="@+id/text_view_books"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <android.support.design.widget.FloatingActionButton

@@ -31,7 +31,9 @@ public final class BookContract {
     //CREATE TABLE books(product_name, price, in_stock,quantity,supplier_name,supplier_phone_number)
 
     public static abstract class BookEntry implements BaseColumns {
-        /** The content URI to access the book data in the provider */
+        /** The content URI to access the book data in the provider
+         * Uri object with withAppendedPath method: Creates a new Uri by appending an already-encoded path segment to a base Uri.
+         * */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
@@ -58,8 +60,8 @@ public final class BookContract {
         /**
          * Possible values for the product being in stock.
          */
-        public static final int IN_STOCK = 0;
-        public static final int NOT_IN_STOCK = 1;
+        public static final int IN_STOCK = 1;
+        public static final int NOT_IN_STOCK = 0;
 
     }
 }

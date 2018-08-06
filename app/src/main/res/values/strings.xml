@@ -22,10 +22,8 @@
 
     <!-- Label for the price in the editor [CHAR LIMIT=30] -->
     <string name="textview_price">price</string>
-
     <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
     <string name="hint_price">price</string>
-
     <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
     <string name="currency_price">€</string>
 
@@ -39,10 +37,16 @@
     <!--edit menu-->
     <string name="action_save">save</string>
 
+    <!-- EDIT PAGE -->
+    <string name="edit_activity_update_existing_product">Edit product</string>
+    <string name="edit_activity_add_new_product">Add a product</string>
+
     <!-- LOG -->
     <string name="error_log_provider_insert_one_book">Failed to insert row for</string>
     <string name="editor_insert_book_failed">Fail to save in the database</string>
     <string name="editor_insert_book_successful">Your book has been successfully saved</string>
+    <string name="empty_shelf_message">Oops, looks like the shelf is empty</string>
+    <string name="empty_shelf_action">Start your inventory by adding a book</string>
 
 
 </resources>

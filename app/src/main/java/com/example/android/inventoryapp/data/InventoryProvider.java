@@ -112,7 +112,7 @@ public class InventoryProvider extends ContentProvider {
     private Uri insertBooks(Uri uri, ContentValues contentValues) {
         Uri insertBooksUri;
 
-        // SANITY CHECK: checks that the value entered by the user are valid.
+        // SANITY CHECK: checks before inserting into the database that the values entered by the user are valid
         String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
         if (productName == null || productName.isEmpty()) {
             throw new IllegalArgumentException("the product cannot be null");
@@ -135,16 +135,16 @@ public class InventoryProvider extends ContentProvider {
 
         // No need to check the supplier name and its phone number, any value is valid (including null).
 
-        //open the DB in writable mode
+        //once the values are checked, open the DB in writable mode
         SQLiteDatabase database = dbHelper.getWritableDatabase();
-        // Insert the new book with the given values
+        // Insert the new book with the given values(contentValues, and return the integer representing the row
         long id = database.insert(BookEntry.TABLE_NAME, null, contentValues);
         // If the ID is -1, then the insertion failed. Log an error and return null.
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         } else {
-            //notify change
+            //notify changes so that the UI can update with the new information
             insertBooksUri = ContentUris.withAppendedId(uri, id);
             getContext().getContentResolver().notifyChange(insertBooksUri, null);
             // Once we know the ID of the new row in the table,
@@ -164,12 +164,12 @@ public class InventoryProvider extends ContentProvider {
             case BOOKS:
                 return updateBook(uri, contentValues, selection, selectionArgs);
             case BOOK_ID:
-                //Extract the ID form the uri
+                //Update only one specific row: Extract the ID form the uri
                 selection = BookEntry._ID + "+?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateBook(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Updateion is not supported for " + uri);
+                throw new IllegalArgumentException("Update is not supported for " + uri);
 
         }
     }
@@ -177,7 +177,7 @@ public class InventoryProvider extends ContentProvider {
     private int updateBook(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         int updateBookUri;
 
-        // SANITY CHECK: checks that the value entered by the user are valid.
+        // SANITY CHECK: checks before updating the database with the new values entered by the user.
         if(contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)){
             String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
             if (productName == null || productName.isEmpty()) {
@@ -209,7 +209,7 @@ public class InventoryProvider extends ContentProvider {
         // No need to check the supplier name and its phone number, any value is valid (including null).
 
 
-       //check that any change has been made
+       //NOTIFY: checks that any change has been made
         if(contentValues.size() == 0){
             return 0;
         } else {
@@ -228,7 +228,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     /**
-     * Delete the data at the given selection and selection arguments.
+     * Delete the data at the given selection and selection arguments. Since the code is rather small, there won't be a separate method.
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -241,14 +241,15 @@ public class InventoryProvider extends ContentProvider {
 
         //match the received uri with a specific action
         switch (match) {
-            case BOOKS:
+            case BOOKS: //delete all rows
                 rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
-                if(rowsDeleted != 0){
+                if(rowsDeleted != 0){ //if the integer returned is 1 or more, it means that one or more rows have been deleted.
+                    //NOTIFY to update the front
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
-                return rowsDeleted;
+                return rowsDeleted; //returns the number of rows deleted
             case BOOK_ID:
-                // extract the ID from the Uri
+                // Delete ONE ITEM: extract the ID from the Uri
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);

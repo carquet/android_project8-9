@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +25,6 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     InventoryDbHelper mDbHelper;
-    SQLiteDatabase mInventoryDb;
     BookCursorAdapter cursorAdapter;
     Cursor cursor;
     int BOOK_LOADER_ID = 1;
@@ -34,13 +35,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         setContentView(R.layout.activity_catalog);
 
         //A: SET UP THE EMPTY VIEW
-        //1. Grab the books that is going to be populated by
+        //1. Grab the books that is going to be populated
         ListView booksListView = findViewById(R.id.text_view_books);
         //2. set the empty view on the listView
         View emptyView = findViewById(R.id.empty_view);
         booksListView.setEmptyView(emptyView);
 
-        //B: Fb button with explicit intent to the edit page
+        //B: Fb button with explicit intent to the edit page for new product
         FloatingActionButton fb = findViewById(R.id.fab);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,11 +61,21 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         cursorAdapter = new BookCursorAdapter(this, cursor);
         booksListView.setAdapter(cursorAdapter);
 
-
         //E: ASYNC TASK
         //1. setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset
         // specific ID attached to this loader
         getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
+
+        //F: hook an intent on the itemView clicked that opens an edit page for update
+        booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent updateEditIntent = new Intent(CatalogActivity.this, EditActivity.class);
+                Uri currentUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
+                updateEditIntent.setData(currentUri);
+                startActivity(updateEditIntent);
+            }
+        });
     }
 
 
@@ -80,14 +91,14 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(BookEntry.COLUMN_PRICE, 22.22);
         values.put(BookEntry.COLUMN_IN_STOCK, 1);
         values.put(BookEntry.COLUMN_QUANTITY, 5);
-        values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Midleton");
+        values.put(BookEntry.COLUMN_SUPPLIER_NAME, "Cambridge");
         values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, "555-345-234");
 
-        //insert a new roa in the table with a specific ID
+        //insert a new row in the table with a specific ID
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
-        if (newUri == null) {
+        if ((newUri == null) || newUri.equals(Uri.EMPTY)) {
             // If the row ID is -1, then there was an error with insertion.
             Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
         } else {
@@ -98,7 +109,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     /**
-     * MENU methods
+     * MENU
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -120,9 +131,12 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * LOADER
+     */
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        // Define a projection that specifies which columns from the database
+        // Defines a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {BookEntry._ID,
                 BookEntry.COLUMN__PRODUCT_NAME,

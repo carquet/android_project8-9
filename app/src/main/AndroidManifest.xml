@@ -18,7 +18,6 @@
 
         </activity>
         <activity android:name=".EditActivity"
-            android:label="edit"
             android:parentActivityName="com.example.android.inventoryapp.CatalogActivity">
 
             <meta-data

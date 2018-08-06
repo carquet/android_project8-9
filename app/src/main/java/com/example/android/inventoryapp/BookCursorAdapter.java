@@ -21,13 +21,13 @@ public class BookCursorAdapter extends CursorAdapter {
      *
      * @param context The context
      * @param cursor  The cursor from which to get the data.
+     * Flags used to determine the behavior of the adapter; recommended constructor
      */
     public BookCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
     }
 
     // The newView method is used to inflate a new view and return it,
-    // you don't bind any data to the view at this point.
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
@@ -38,30 +38,31 @@ public class BookCursorAdapter extends CursorAdapter {
         // Find fields to populate in inflated template
         TextView productNameView = (TextView) view.findViewById(R.id.product_name);
         TextView productPriceView = (TextView) view.findViewById(R.id.product_price);
-        TextView supplierNameView = (TextView) view.findViewById(R.id.supplier_name);
         TextView stockView = (TextView) view.findViewById(R.id.stock);
         TextView quantityView = (TextView) view.findViewById(R.id.quantity);
+        TextView supplierNameView = (TextView) view.findViewById(R.id.supplier_name);
         TextView phoneNumberView = (TextView) view.findViewById(R.id.supplier_phone_number);
 
         // Extract properties from cursor
         String productNameString = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
         float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
-        String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+        String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
         String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
 
 
         // Populate fields with extracted properties
         productNameView.setText(productNameString);
         productPriceView.setText(String.valueOf(productPriceFloat));
-        supplierNameView.setText(supplierName);
         if (stock == 0) {
             stockView.setText(R.string.not_in_stock);
         } else {
             stockView.setText(R.string.in_stock);
         }
         quantityView.setText(String.valueOf(quantity));
+        //see issue #1 next iteration: set an empty field if there is no information
+        supplierNameView.setText(supplierName);
         phoneNumberView.setText(supplierPhoneNumber);
 
     }
