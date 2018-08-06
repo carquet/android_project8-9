@@ -34,14 +34,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        //A: SET UP THE EMPTY VIEW
-        //1. Grab the books that is going to be populated
-        ListView booksListView = findViewById(R.id.text_view_books);
-        //2. set the empty view on the listView
-        View emptyView = findViewById(R.id.empty_view);
-        booksListView.setEmptyView(emptyView);
-
-        //B: Fb button with explicit intent to the edit page for new product
+        //Fb button with explicit intent to the edit page for new product
         FloatingActionButton fb = findViewById(R.id.fab);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,22 +44,19 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
-        //C: ACCESS TO DATABASE with  SQLiteOpenHelper
-        // and pass the context, which is the current activity.
-        mDbHelper = new InventoryDbHelper(this);
+        //SET UP THE EMPTY VIEW
+        //1. Grab the books that is going to be populated
+        ListView booksListView = findViewById(R.id.text_view_books);
+        //2. set the empty view on the listView
+        View emptyView = findViewById(R.id.empty_view);
+        booksListView.setEmptyView(emptyView);
 
-
-        //D: HOOK ADAPTER TO LISTVIEW
+        //HOOK ADAPTER TO LISTVIEW
         booksListView = (ListView) findViewById(R.id.text_view_books);
-        cursorAdapter = new BookCursorAdapter(this, cursor);
+        cursorAdapter = new BookCursorAdapter(this, null);
         booksListView.setAdapter(cursorAdapter);
 
-        //E: ASYNC TASK
-        //1. setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset
-        // specific ID attached to this loader
-        getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
-
-        //F: hook an intent on the itemView clicked that opens an edit page for update
+        //hook an intent on the itemView clicked that opens an edit page for update
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -76,6 +66,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 startActivity(updateEditIntent);
             }
         });
+
+        //ASYNC TASK
+        //1. setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset
+        // specific ID attached to this loader
+        getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
+
+
     }
 
 
@@ -98,13 +95,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
-        if ((newUri == null) || newUri.equals(Uri.EMPTY)) {
+        /*if ((newUri == null) || newUri.equals(Uri.EMPTY)) {
             // If the row ID is -1, then there was an error with insertion.
             Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 
@@ -138,7 +135,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Defines a projection that specifies which columns from the database
         // you will actually use after this query.
-        String[] projection = {BookEntry._ID,
+        String[] projection = {
+                BookEntry._ID,
                 BookEntry.COLUMN__PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
                 BookEntry.COLUMN_IN_STOCK,

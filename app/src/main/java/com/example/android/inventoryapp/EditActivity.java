@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
 
@@ -29,33 +30,38 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
  */
 public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    //update information loader id
+    private static final int UPDATE_LOADER_ID = 2;
+
+    //selected or updated row
+    private Uri currentUri;
+
+    //field to edit information
     private EditText productNameEditText;
     private EditText supplierNameEditText;
     private EditText supplierPhoneNumberEditText;
-    private Spinner inStockSpinner;
     private EditText priceEditText;
     private EditText quantityEditText;
+
+    private Spinner inStockSpinner;
 
 
     /**
      * The possible valid values are in the BookContract.java file:
      * {@link BookEntry#IN_STOCK}, {@link BookEntry#NOT_IN_STOCK}
      */
-    private int stock = BookEntry.NOT_IN_STOCK;
+    private int stock = BookEntry.IN_STOCK;
 
-    //update information loader id
-    int UPDATE_LOADER_ID = 2;
-
-    //selected or updated row
-    private Uri currentUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+
         //getting the intent from catalogue activity to update a product from the db
         Intent intent = getIntent();
         currentUri = intent.getData();
+
         //check if there is a uri in the intent
         if(currentUri == null){
             setTitle(getString(R.string.edit_activity_add_new_product));
@@ -73,8 +79,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         quantityEditText = (EditText) findViewById(R.id.edit_quantity);
 
         setupSpinner();
-
-
 
 
     }
@@ -115,6 +119,55 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         });
     }
 
+    private void save() {
+
+        // Read from input fields
+        // Use trim to eliminate leading or trailing white space
+        String productNameString = productNameEditText.getText().toString().trim();
+        String priceString = priceEditText.getText().toString().trim();
+        String quantityString = quantityEditText.getText().toString().trim();
+        String supplierNameString = supplierNameEditText.getText().toString().trim();
+        String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
+
+        //defines an object to put the values
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
+        float price = Float.parseFloat(priceString);
+        values.put(BookEntry.COLUMN_PRICE, price);
+        int quantity = Integer.parseInt(quantityString);
+        values.put(BookEntry.COLUMN_QUANTITY, quantity);
+        values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+        values.put(BookEntry.COLUMN_IN_STOCK, stock);
+
+
+        //chekcs if it is a new product or an existing one by checking the existence of the uri
+        if (currentUri == null) {
+            //check whether all the information required is entered
+            //insert a new row in the table with a specific ID
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newUri == null) {
+                // If the row ID is -1, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+            }
+
+        } else {
+            //insert a new row in the table with a specific ID
+            int update = getContentResolver().update(currentUri, values, null, null);
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            if (update == 0) {
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
@@ -143,58 +196,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         return super.onOptionsItemSelected(item);
     }
 
-    private void save() {
-
-        // Read from input fields
-        // Use trim to eliminate leading or trailing white space
-        String productNameString = productNameEditText.getText().toString().trim();
-        String priceString = priceEditText.getText().toString().trim();
-        String quantityString = quantityEditText.getText().toString().trim();
-        String supplierNameString = supplierNameEditText.getText().toString().trim();
-        String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
-
-            //defines an object to put the values
-        ContentValues values = new ContentValues();
-            values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
-            float price = Float.parseFloat(priceString);
-            values.put(BookEntry.COLUMN_PRICE, price);
-            int quantity = Integer.parseInt(quantityString);
-            values.put(BookEntry.COLUMN_QUANTITY, quantity);
-            values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-            values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
-            values.put(BookEntry.COLUMN_IN_STOCK, stock);
-
-
-        //chekcs if it is a new product or an existing one by checking the existence of the uri
-        if (currentUri == null) {
-            //check whether all the information required is entered
-            //insert a new row in the table with a specific ID
-            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-            // Show a toast message depending on whether or not the insertion was successful
-            if (newUri == null) {
-                // If the row ID is -1, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast with the row ID.
-                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-            }
-
-        }else{
-            //insert a new row in the table with a specific ID
-            int update = getContentResolver().update(currentUri, values, null, null);
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            if(update == 0){
-                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
-            }else
-                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
-
-
-
-
 
     /**
      * LOADER to communicate with the database and display information to be updated
@@ -203,7 +204,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
-        String[] projection = {BookEntry._ID,
+        String[] projection = {
+                BookEntry._ID,
                 BookEntry.COLUMN__PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
                 BookEntry.COLUMN_IN_STOCK,

@@ -72,7 +72,7 @@ public class InventoryProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
-                cursor = database.query(BookEntry.TABLE_NAME, projection, null, null, null, null, null);
+                cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 break;
             case BOOK_ID:
                 // For every "?" in the selection, we need to have an element in the selection
@@ -84,7 +84,6 @@ public class InventoryProvider extends ContentProvider {
                 // This will perform a query on the books table where the _id equals a integer given to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
-
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
@@ -100,7 +99,7 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         //adapt the results according to the uri sent
-        int match = sUriMatcher.match(uri);
+        final int match = sUriMatcher.match(uri);
         switch (match) {
             case BOOKS:
                 return insertBooks(uri, contentValues);
@@ -110,11 +109,9 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private Uri insertBooks(Uri uri, ContentValues contentValues) {
-        Uri insertBooksUri;
-
         // SANITY CHECK: checks before inserting into the database that the values entered by the user are valid
         String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
-        if (productName == null || productName.isEmpty()) {
+        if (productName == null) {
             throw new IllegalArgumentException("the product cannot be null");
         }
 
@@ -124,12 +121,12 @@ public class InventoryProvider extends ContentProvider {
         }
 
         Integer productPrice = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
-        if ((productPrice == null) || (productPrice < 0)){
+        if (productPrice != null && productPrice < 0){
             throw new IllegalArgumentException("the price needs to be a positive number");
         }
 
         Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
-        if (quantity == null || quantity < 0){
+        if (quantity != null && quantity < 0){
             throw new IllegalArgumentException("the quantity needs to be a positive number");
         }
 
@@ -145,11 +142,9 @@ public class InventoryProvider extends ContentProvider {
             return null;
         } else {
             //notify changes so that the UI can update with the new information
-            insertBooksUri = ContentUris.withAppendedId(uri, id);
-            getContext().getContentResolver().notifyChange(insertBooksUri, null);
-            // Once we know the ID of the new row in the table,
-            // return the new URI with the ID appended to the end of it
-            return insertBooksUri;
+            getContext().getContentResolver().notifyChange(uri, null);
+
+            return ContentUris.withAppendedId(uri, id);
         }
 
     }
@@ -165,7 +160,7 @@ public class InventoryProvider extends ContentProvider {
                 return updateBook(uri, contentValues, selection, selectionArgs);
             case BOOK_ID:
                 //Update only one specific row: Extract the ID form the uri
-                selection = BookEntry._ID + "+?";
+                selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateBook(uri, contentValues, selection, selectionArgs);
             default:
@@ -175,7 +170,7 @@ public class InventoryProvider extends ContentProvider {
     }
 
     private int updateBook(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-        int updateBookUri;
+
 
         // SANITY CHECK: checks before updating the database with the new values entered by the user.
         if(contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)){
@@ -218,7 +213,7 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         //enter the new info
-        updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        int updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
 
         if(updateBookUri != 0) {//notify for the front end to update
             getContext().getContentResolver().notifyChange(uri, null);
