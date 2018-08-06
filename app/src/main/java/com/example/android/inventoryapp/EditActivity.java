@@ -77,9 +77,12 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         Intent intent = getIntent();
         currentUri = intent.getData();
 
-        //check if there is a uri in the intent
+        //check if there is an existing  uri in the intent
         if(currentUri == null){
+            //the add product shows
             setTitle(getString(R.string.edit_activity_add_new_product));
+            // the delete option is not shown
+            invalidateOptionsMenu();
         }else{
             setTitle(getString(R.string.edit_activity_update_existing_product));
             getLoaderManager().initLoader(UPDATE_LOADER_ID, null, this);
@@ -198,6 +201,15 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu){
+        super.onPrepareOptionsMenu(menu);
+        if(currentUri == null){
+            MenuItem menuItem = menu.findItem(R.id.action_delete);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu options from the res/menu/menu_editor.xml file.
         // This adds menu items to the app bar.
@@ -215,6 +227,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 save();
                 // Exit activity
                 finish();
+                return true;
+            case R.id.action_delete:
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:

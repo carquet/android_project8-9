@@ -51,6 +51,7 @@
     <string name="unsaved_changed_dialog_msg">Oopsy! You haven\'t saved your information. Wanna quit and discard any changes?</string>
     <string name="discard_msg">discard</string>
     <string name="keep_editing">keep editing</string>
+    <string name="action_delete">delete</string>
 
 
 </resources>
