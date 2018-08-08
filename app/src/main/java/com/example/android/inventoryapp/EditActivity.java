@@ -3,6 +3,7 @@ package com.example.android.inventoryapp;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -20,7 +21,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -49,6 +52,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private EditText quantityEditText;
 
     private Spinner inStockSpinner;
+    private Button increaseButton;
+    private Button decreaseButton;
 
     //STEP 1. set up boolean to listen to any changed made and warn users when they leave the edit page
     private boolean bookHasChanged = false;
@@ -103,6 +108,23 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         inStockSpinner.setOnTouchListener(touchListener);
         priceEditText.setOnTouchListener(touchListener);
         quantityEditText.setOnTouchListener(touchListener);
+
+        //set up increase and decrease button on the front
+        increaseButton = (Button) findViewById(R.id.quantity_increase);
+        increaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //set up increase and decrease button on the front
+        decreaseButton = (Button) findViewById(R.id.quantity_decrease);
+        decreaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         setupSpinner();
 

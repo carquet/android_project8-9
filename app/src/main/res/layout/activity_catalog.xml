@@ -42,7 +42,7 @@
     <ListView
         android:id="@+id/text_view_books"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="1000dp"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
