@@ -76,8 +76,6 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-
-
     /**
      * INSERT DUMMY DATA
      */
@@ -145,9 +143,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 BookEntry.COLUMN__PRODUCT_NAME,
                 BookEntry.COLUMN_PRICE,
                 BookEntry.COLUMN_IN_STOCK,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+                BookEntry.COLUMN_QUANTITY};
+                //BookEntry.COLUMN_SUPPLIER_NAME,
+                //BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
         //this loader will excute the content provider 's query method in the background.
         // Now create and return a CursorLoader that will take care of

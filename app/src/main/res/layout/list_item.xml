@@ -29,7 +29,7 @@
             android:textColor="#AEB6BD"
             tools:text="10.34"
             android:paddingTop="2dp"/>
-        <TextView
+<!--        <TextView
             android:id="@+id/supplier_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,10 +37,10 @@
             android:textAppearance="?android:textAppearanceSmall"
             android:textColor="#AEB6BD"
             tools:text="supplier name"
-            android:paddingTop="2dp"/>
+            android:paddingTop="2dp"/>-->
 
 
-        <RelativeLayout
+<!--        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <ImageView
@@ -56,7 +56,7 @@
                 android:layout_toRightOf="@id/call"
                 android:textColor="#AEB6BD"
                 tools:text="222-222-222"/>
-        </RelativeLayout>
+        </RelativeLayout>-->
 
     </LinearLayout>
 

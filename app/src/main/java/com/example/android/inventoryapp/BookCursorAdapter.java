@@ -41,16 +41,16 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView productPriceView = (TextView) view.findViewById(R.id.product_price);
         TextView stockView = (TextView) view.findViewById(R.id.stock);
         TextView quantityView = (TextView) view.findViewById(R.id.quantity);
-        TextView supplierNameView = (TextView) view.findViewById(R.id.supplier_name);
-        TextView phoneNumberView = (TextView) view.findViewById(R.id.supplier_phone_number);
+        //TextView supplierNameView = (TextView) view.findViewById(R.id.supplier_name);
+        //TextView phoneNumberView = (TextView) view.findViewById(R.id.supplier_phone_number);
 
         // Extract properties from cursor
         String productNameString = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
         float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-        String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
-        String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
+        //String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
+        //String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
 
 
         // Populate fields with extracted properties
@@ -63,7 +63,7 @@ public class BookCursorAdapter extends CursorAdapter {
         }
         quantityView.setText(String.valueOf(quantity));
         //see issue #1 next iteration: set an empty field if there is no information
-        if(TextUtils.isEmpty(supplierName)){
+        /*if(TextUtils.isEmpty(supplierName)){
             supplierNameView.setText(R.string.supplier_unknown);
         }else{
             supplierNameView.setText(supplierName);
@@ -73,7 +73,7 @@ public class BookCursorAdapter extends CursorAdapter {
             phoneNumberView.setText(R.string.supplier_phonenumber_unknown);
         }else{
             phoneNumberView.setText(supplierPhoneNumber);
-        }
+        }*/
 
 
     }

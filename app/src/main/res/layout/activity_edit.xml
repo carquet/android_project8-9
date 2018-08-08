@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".EditActivity">
@@ -177,6 +180,7 @@
         </LinearLayout>
 
     </LinearLayout> <!--end of PRICE FIELD-->
+    <!-- ACTION BUTTON -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -186,17 +190,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_delete"
-            android:layout_marginTop="25dp"
+            android:layout_margin="25dp"
             android:backgroundTint="@color/warning" />
         <Button
             android:id="@+id/action_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/action_order"
-            android:layout_marginTop="25dp"
+            android:layout_margin="25dp"
             android:backgroundTint="@color/action"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 
 
 </LinearLayout>
+</ScrollView>
