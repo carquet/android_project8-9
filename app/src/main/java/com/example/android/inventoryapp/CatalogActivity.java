@@ -28,7 +28,6 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
     InventoryDbHelper mDbHelper;
     BookCursorAdapter cursorAdapter;
-    Cursor cursor;
     int BOOK_LOADER_ID = 1;
 
     @Override
