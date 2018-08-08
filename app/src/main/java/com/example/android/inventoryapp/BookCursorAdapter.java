@@ -49,9 +49,7 @@ public class BookCursorAdapter extends CursorAdapter {
         float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-
         String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
-
         String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
 
 

@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -14,7 +14,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:textAppearance="?android:textAppearanceMedium"
-        android:textColor="#2B3D4D"  />
+        android:textColor="#2B3D4D"
+        tools:text="product name"/>
 
     <TextView
         android:id="@+id/product_price"
@@ -22,7 +23,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD"
+        tools:text="$10.34"/>
 
     <TextView
         android:id="@+id/supplier_name"
@@ -30,7 +32,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD"
+        tools:text="supplier name"/>
 
     <TextView
         android:id="@+id/quantity"
@@ -38,7 +41,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD"
+        tools:text="34"/>
 
     <TextView
         android:id="@+id/stock"
@@ -46,7 +50,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD" />
+        android:textColor="#AEB6BD"
+        android:textAllCaps="true"
+        tools:text="in stock"/>
 
     <TextView
         android:id="@+id/supplier_phone_number"
@@ -54,7 +60,8 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textAppearance="?android:textAppearanceSmall"
-        android:textColor="#AEB6BD"  />
+        android:textColor="#AEB6BD"
+        tools:text="222-222-222"/>
 
 
 </LinearLayout>
