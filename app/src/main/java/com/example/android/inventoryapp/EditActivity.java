@@ -33,7 +33,7 @@ import org.w3c.dom.Text;
 /**
  * allows user to create or update a new product from the inventory
  */
-public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class EditActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     //update information loader id
     private static final int UPDATE_LOADER_ID = 2;
@@ -78,17 +78,17 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         currentUri = intent.getData();
 
         //check if there is an existing  uri in the intent
-        if(currentUri == null){
+        if (currentUri == null) {
             //the add product shows
             setTitle(getString(R.string.edit_activity_add_new_product));
             // the delete option is not shown
             invalidateOptionsMenu();
-        }else{
+        } else {
             setTitle(getString(R.string.edit_activity_update_existing_product));
             getLoaderManager().initLoader(UPDATE_LOADER_ID, null, this);
         }
 
-        // Find all relevant views that we will need to read user input from
+        // SET UP FRONT: Find all relevant views that we will need to read user input from
         productNameEditText = (EditText) findViewById(R.id.edit_product_name);
         supplierNameEditText = (EditText) findViewById(R.id.edit_supplier_name);
         supplierPhoneNumberEditText = (EditText) findViewById(R.id.edit_supplier_phone_number);
@@ -96,7 +96,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         priceEditText = (EditText) findViewById(R.id.edit_price);
         quantityEditText = (EditText) findViewById(R.id.edit_quantity);
 
-        //set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
+        //WARNING: set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
         productNameEditText.setOnTouchListener(touchListener);
         supplierNameEditText.setOnTouchListener(touchListener);
         supplierPhoneNumberEditText.setOnTouchListener(touchListener);
@@ -157,7 +157,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
         ContentValues values;
 
-        if(TextUtils.isEmpty(productNameString) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))){
+        if (TextUtils.isEmpty(productNameString) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))) {
             Toast.makeText(this, getString(R.string.missing_info_for_successful_save), Toast.LENGTH_SHORT).show();
             return;
         } else {
@@ -201,9 +201,9 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     @Override
-    public boolean onPrepareOptionsMenu(Menu menu){
+    public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        if(currentUri == null){
+        if (currentUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
         }
         return true;
@@ -229,11 +229,13 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 finish();
                 return true;
             case R.id.action_delete:
+                //when the delete button is pressed, we want a dialog to appear and confirm the action.
+                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
                 //no changes have been made the user can go back
-                if(!bookHasChanged){
+                if (!bookHasChanged) {
                     NavUtils.navigateUpFromSameTask((EditActivity.this));
                     return true;
                 }
@@ -261,30 +263,20 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN__PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_IN_STOCK,
-                BookEntry.COLUMN_QUANTITY,
-                BookEntry.COLUMN_SUPPLIER_NAME,
-                BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN__PRODUCT_NAME, BookEntry.COLUMN_PRICE, BookEntry.COLUMN_IN_STOCK, BookEntry.COLUMN_QUANTITY, BookEntry.COLUMN_SUPPLIER_NAME, BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
 
         //this loader will execute the content provider 's query method in the background.
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
-        return new CursorLoader(this,
-                currentUri,             //the specific uri called
+        return new CursorLoader(this, currentUri,             //the specific uri called
                 projection,             //the column for the WHERE cl
-                null,
-                null,
-                null);
+                null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursorData) {
-        if (cursorData.moveToFirst()){
+        if (cursorData.moveToFirst()) {
             int productColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN__PRODUCT_NAME);
             int priceColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_PRICE);
             int stockColumnIndex = cursorData.getColumnIndex(BookEntry.COLUMN_IN_STOCK);
@@ -326,14 +318,15 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener){
+    //LEAVING THE EDIT PAGE WITHOUT SAVING INFORMATION
+    private void showUnsavedChangesDialog(DialogInterface.OnClickListener discardButtonClickListener) {
         AlertDialog.Builder warning = new AlertDialog.Builder(this);
         warning.setMessage(R.string.unsaved_changed_dialog_msg);
         warning.setPositiveButton(R.string.discard_msg, discardButtonClickListener);
         warning.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(dialog != null){
+                if (dialog != null) {
                     dialog.dismiss();
                 }
             }
@@ -344,8 +337,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     //When back button is pressed, this method is called and check whether there are unsaved informaion
     @Override
-    public void onBackPressed(){
-        if(!bookHasChanged){
+    public void onBackPressed() {
+        if (!bookHasChanged) {
             super.onBackPressed();
             return;
         }
@@ -358,4 +351,53 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         };
         showUnsavedChangesDialog(discardButtonClickListener);
     }
+
+    ////DELETE///
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.delete_dialog_msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button and trigger the delete method.
+                delete();
+                //once the product is deleted, the user is sent back to the main activity but stays if he/she pressed "cancel"
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the product in the database.
+     */
+    private void delete() {
+        if(currentUri != null){
+            //insert a new row in the table with a specific ID
+            int delete = getContentResolver().delete(currentUri, null, null);
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            if (delete == 0) {
+                Toast.makeText(this, getString(R.string.editor_delete_product_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_delete_product_successful), Toast.LENGTH_SHORT).show();
+
+            }
+        }
+
+    }
+
 }

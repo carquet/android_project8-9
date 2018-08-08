@@ -3,6 +3,7 @@ package com.example.android.inventoryapp;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +49,9 @@ public class BookCursorAdapter extends CursorAdapter {
         float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
         int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+
         String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
+
         String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
 
 
@@ -62,8 +65,18 @@ public class BookCursorAdapter extends CursorAdapter {
         }
         quantityView.setText(String.valueOf(quantity));
         //see issue #1 next iteration: set an empty field if there is no information
-        supplierNameView.setText(supplierName);
-        phoneNumberView.setText(supplierPhoneNumber);
+        if(TextUtils.isEmpty(supplierName)){
+            supplierNameView.setText(R.string.supplier_unknown);
+        }else{
+            supplierNameView.setText(supplierName);
+        }
+
+        if(TextUtils.isEmpty(supplierName)){
+            phoneNumberView.setText(R.string.supplier_phonenumber_unknown);
+        }else{
+            phoneNumberView.setText(supplierPhoneNumber);
+        }
+
 
     }
 
