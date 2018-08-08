@@ -14,6 +14,7 @@
 
     <!-- Warning colours-->
     <color name="warning">#ff3135</color>
+    <color name="action">#00e24a</color>
 
     <!-- Primary dark color for the editor -->
     <color name="editorColorPrimaryDark">#009a95</color>

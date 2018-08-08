@@ -177,13 +177,26 @@
         </LinearLayout>
 
     </LinearLayout> <!--end of PRICE FIELD-->
-    <Button
-        android:id="@+id/action_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/action_delete"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/warning"
-        android:layout_gravity="center_horizontal"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/action_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_delete"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="@color/warning" />
+        <Button
+            android:id="@+id/action_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_order"
+            android:layout_marginTop="25dp"
+            android:backgroundTint="@color/action"
+            android:layout_alignParentRight="true" />
+    </RelativeLayout>
+
 
 </LinearLayout>

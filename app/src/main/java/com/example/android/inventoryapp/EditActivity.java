@@ -56,6 +56,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private Button increaseButton;
     private Button decreaseButton;
     private Button deleteProductButton;
+    private Button orderProductButton;
 
     //STEP 1. set up boolean to listen to any changed made and warn users when they leave the edit page
     private boolean bookHasChanged = false;
@@ -105,6 +106,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         increaseButton = (Button) findViewById(R.id.quantity_increase);
         decreaseButton = (Button) findViewById(R.id.quantity_decrease);
         deleteProductButton = (Button) findViewById(R.id.action_delete);
+        orderProductButton = (Button) findViewById(R.id.action_order);
 
         //WARNING: set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
         productNameEditText.setOnTouchListener(touchListener);
@@ -140,11 +142,19 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        orderProductButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Intent orderIntent = new Intent()
+            }
+        });
+
         setupSpinner();
 
     }
 
     // QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0
+
     private void addQuantity() {
         String quantityString = quantityEditText.getText().toString().trim();
         if (TextUtils.isEmpty(quantityString)){
@@ -215,60 +225,52 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
+        if ((TextUtils.isEmpty(productNameString)) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))){
 
-
-        if (TextUtils.isEmpty(productNameString) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))) {
             Toast.makeText(this, getString(R.string.missing_info_for_successful_save), Toast.LENGTH_LONG).show();
 
-        } else {
-            //defines an object to put the values
-            ContentValues values = new ContentValues();
-            values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
-            float price = Float.parseFloat(priceString);
-            values.put(BookEntry.COLUMN_PRICE, price);
-            int quantity = Integer.parseInt(quantityString);
-            values.put(BookEntry.COLUMN_QUANTITY, quantity);
-            values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
-            values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
-            values.put(BookEntry.COLUMN_IN_STOCK, stock);
-            //chekcs if it is a new product or an existing one by checking the existence of the uri
-            if (currentUri == null) {
-                //check whether all the information required is entered
-                //insert a new row in the table with a specific ID
-                Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
-                // Show a toast message depending on whether or not the insertion was successful
-                if (newUri == null) {
-                    // If the row ID is -1, then there was an error with insertion.
-                    Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
-                } else {
-                    // Otherwise, the insertion was successful and we can display a toast with the row ID.
-                    Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-                }
+            return;
+        }
+        //defines an object to put the values
+        ContentValues values = new ContentValues();
+        values.put(BookEntry.COLUMN__PRODUCT_NAME, productNameString);
+        float price = Float.parseFloat(priceString);
+        values.put(BookEntry.COLUMN_PRICE, price);
+        int quantity = Integer.parseInt(quantityString);
+        values.put(BookEntry.COLUMN_QUANTITY, quantity);
+        values.put(BookEntry.COLUMN_SUPPLIER_NAME, supplierNameString);
+        values.put(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER, supplierPhoneNumber);
+        values.put(BookEntry.COLUMN_IN_STOCK, stock);
 
+        //chekcs if it is a new product or an existing one by checking the existence of the uri
+        if (currentUri == null) {
+            //check whether all the information required is entered
+            //insert a new row in the table with a specific ID
+            Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+            // Show a toast message depending on whether or not the insertion was successful
+            if (newUri == null) {
+                // If the row ID is -1, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
             } else {
-                //insert a new row in the table with a specific ID
-                int update = getContentResolver().update(currentUri, values, null, null);
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
-                if (update == 0) {
-                    Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+            }
 
-                }
+        } else {
+            //insert a new row in the table with a specific ID
+            int update = getContentResolver().update(currentUri, values, null, null);
+            // Otherwise, the insertion was successful and we can display a toast with the row ID.
+            if (update == 0) {
+                Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+
             }
         }
 
 
     }
 
-/*    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (currentUri == null) {
-            MenuItem menuItem = menu.findItem(R.id.action_delete);
-        }
-        return true;
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -391,6 +393,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         AlertDialog alertDialog = warning.create();
         alertDialog.show();
     }
+
 
     //When back button is pressed, this method is called and check whether there are unsaved informaion
     @Override
