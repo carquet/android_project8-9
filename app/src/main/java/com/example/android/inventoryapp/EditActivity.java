@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -100,6 +101,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         inStockSpinner = (Spinner) findViewById(R.id.spinner_in_stock);
         priceEditText = (EditText) findViewById(R.id.edit_price);
         quantityEditText = (EditText) findViewById(R.id.edit_quantity);
+        increaseButton = (Button) findViewById(R.id.quantity_increase);
+        decreaseButton = (Button) findViewById(R.id.quantity_decrease);
 
         //WARNING: set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
         productNameEditText.setOnTouchListener(touchListener);
@@ -108,27 +111,47 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         inStockSpinner.setOnTouchListener(touchListener);
         priceEditText.setOnTouchListener(touchListener);
         quantityEditText.setOnTouchListener(touchListener);
+        increaseButton.setOnTouchListener(touchListener);
+        decreaseButton.setOnTouchListener(touchListener);
 
-        //set up increase and decrease button on the front
-        increaseButton = (Button) findViewById(R.id.quantity_increase);
+        //set up increase quantity button
         increaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"button clicked", Toast.LENGTH_SHORT).show();
+                addQuantity();
             }
         });
-        //set up increase and decrease button on the front
-        decreaseButton = (Button) findViewById(R.id.quantity_decrease);
+        //set up decrease quantity button
         decreaseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"button clicked", Toast.LENGTH_SHORT).show();
+                decreaseQuantity();
             }
         });
 
         setupSpinner();
 
+    }
 
+    // QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0
+
+    private void addQuantity() {
+        String quantityString = quantityEditText.getText().toString().trim();
+        int quantity = Integer.parseInt(quantityString);
+        quantity = quantity +1;
+        quantityEditText.setText(String.valueOf(quantity));
+    }
+
+    private void decreaseQuantity() {
+        String quantityString = quantityEditText.getText().toString().trim();
+        int quantity = Integer.parseInt(quantityString);
+        if (quantity == 0){
+            Toast.makeText(this, getString(R.string.editor_quantity_negative_error_msg), Toast.LENGTH_SHORT).show();
+            return;
+        }else{
+            quantity = quantity - 1;
+        }
+        quantityEditText.setText(String.valueOf(quantity));
     }
 
     /**

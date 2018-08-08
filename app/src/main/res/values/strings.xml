@@ -75,6 +75,7 @@
     <string name="editor_delete_all_product_successful">all your products were deleted successfully</string>
     <string name="supplier_unknown">Supplier unknown</string>
     <string name="supplier_phonenumber_unknown">Supplier phone number unknown</string>
+    <string name="editor_quantity_negative_error_msg">Your quantity cannot be negative</string>
 
 
 </resources>

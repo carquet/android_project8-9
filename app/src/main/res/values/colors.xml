@@ -12,6 +12,9 @@
     <!-- Primary color for the editor -->
     <color name="editorColorPrimary">#2D3640</color>
 
+    <!-- Warning colours-->
+    <color name="warning">#ff3135</color>
+
     <!-- Primary dark color for the editor -->
     <color name="editorColorPrimaryDark">#009a95</color>
     <color name="not_in_stock">#ff3135</color>
