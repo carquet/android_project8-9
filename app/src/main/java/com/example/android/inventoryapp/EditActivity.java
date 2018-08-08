@@ -55,6 +55,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private Spinner inStockSpinner;
     private Button increaseButton;
     private Button decreaseButton;
+    private Button deleteProductButton;
 
     //STEP 1. set up boolean to listen to any changed made and warn users when they leave the edit page
     private boolean bookHasChanged = false;
@@ -103,6 +104,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         quantityEditText = (EditText) findViewById(R.id.edit_quantity);
         increaseButton = (Button) findViewById(R.id.quantity_increase);
         decreaseButton = (Button) findViewById(R.id.quantity_decrease);
+        deleteProductButton = (Button) findViewById(R.id.action_delete);
 
         //WARNING: set up on touch listener to check whetehr any change were made before leaving the page and warn them if necessary
         productNameEditText.setOnTouchListener(touchListener);
@@ -113,6 +115,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         quantityEditText.setOnTouchListener(touchListener);
         increaseButton.setOnTouchListener(touchListener);
         decreaseButton.setOnTouchListener(touchListener);
+
 
         //set up increase quantity button
         increaseButton.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +129,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 decreaseQuantity();
+            }
+        });
+
+        deleteProductButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //when the delete button is pressed, we want a dialog to appear and confirm the action.
+                showDeleteConfirmationDialog();
             }
         });
 
@@ -272,10 +283,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 save();
                 // Exit activity
                 finish();
-                return true;
-            case R.id.action_delete:
-                //when the delete button is pressed, we want a dialog to appear and confirm the action.
-                showDeleteConfirmationDialog();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
@@ -432,7 +439,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     private void delete() {
         if(currentUri != null){
-            //insert a new row in the table with a specific ID
             int delete = getContentResolver().delete(currentUri, null, null);
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             if (delete == 0) {
