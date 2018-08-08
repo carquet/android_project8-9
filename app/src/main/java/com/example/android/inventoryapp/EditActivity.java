@@ -142,10 +142,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        //Set up call action button to call supplier. If there is no phone number in the DB, DIAL allows you to dial or change the given phone number.
         orderProductButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent orderIntent = new Intent()
+                String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + supplierPhoneNumber));
+                startActivity(intent);
             }
         });
 
@@ -348,7 +352,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             int stock = cursorData.getInt(stockColumnIndex);
             int quantityInt = cursorData.getInt(quantityColumnIndex);
             String supplier = cursorData.getString(supplierColumnIndex);
-            String phoneNumber = cursorData.getString(phoneColumnIndex);
+            final String phoneNumber = cursorData.getString(phoneColumnIndex);
 
             //display information from the current product
             productNameEditText.setText(product);
@@ -368,7 +372,11 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                     break;
 
             }
+
+
         }
+
+
 
     }
 
