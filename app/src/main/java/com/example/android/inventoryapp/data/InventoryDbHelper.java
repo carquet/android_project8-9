@@ -27,7 +27,6 @@ import com.example.android.inventoryapp.data.BookContract.BookEntry;
  */
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
-    public static final String LOG_TAG = InventoryDbHelper.class.getSimpleName();
 
     /**
      * Name of the database file

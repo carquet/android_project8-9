@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -18,17 +17,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.inventoryapp.data.InventoryDbHelper;
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
-public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
-    InventoryDbHelper mDbHelper;
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+
     BookCursorAdapter cursorAdapter;
+
+    //Specific ID for BookCursorLoader
     int BOOK_LOADER_ID = 1;
 
     @Override
@@ -36,7 +34,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        //Fb button with explicit intent to the edit page for new product
+        //FAB button with explicit intent to the edit page for new product : triggers the ADD PRODUCT
         FloatingActionButton fb = findViewById(R.id.fab);
         fb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,37 +44,34 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
-        //SET UP THE EMPTY VIEW
+        //EMPTY VIEW
         //1. Grab the books that is going to be populated
         ListView booksListView = findViewById(R.id.text_view_books);
         //2. set the empty view on the listView
         View emptyView = findViewById(R.id.empty_view);
         booksListView.setEmptyView(emptyView);
 
-        //HOOK ADAPTER TO LISTVIEW
+        //CURSOR ADAPTER
         booksListView = (ListView) findViewById(R.id.text_view_books);
         cursorAdapter = new BookCursorAdapter(this, null);
         booksListView.setAdapter(cursorAdapter);
 
-        //hook an intent on the itemView clicked that opens an edit page for update
+        //hook an intent on the itemView clicked that opens an edit page for update: triggers EDIT PRODUCT
         booksListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent updateEditIntent = new Intent(CatalogActivity.this, EditActivity.class);
+                //pass on the current product open passing the current uri to the edit page
                 Uri currentUri = ContentUris.withAppendedId(BookEntry.CONTENT_URI, id);
                 updateEditIntent.setData(currentUri);
                 startActivity(updateEditIntent);
             }
         });
 
-
-
-        //ASYNC TASK
-        //1. setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset
-        // specific ID attached to this loader
+        //ASYNC TASK : CURSOR LOADER
+        //setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset
+        //specific ID attached to this loader
         getLoaderManager().initLoader(BOOK_LOADER_ID, null, this);
-
-
     }
 
     /**
@@ -84,7 +79,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      */
     private void insertBooks() {
 
-        //you create an object  of ContentValues.
+        //you create an object  of ContentValues made of all the values.
         ContentValues values = new ContentValues();
         values.put(BookEntry.COLUMN__PRODUCT_NAME, "English File");
         values.put(BookEntry.COLUMN_PRICE, 22.22);
@@ -97,13 +92,13 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
 
         // Show a toast message depending on whether or not the insertion was successful
-        /*if ((newUri == null) || newUri.equals(Uri.EMPTY)) {
+        if ((newUri == null) || newUri.equals(Uri.EMPTY)) {
             // If the row ID is -1, then there was an error with insertion.
             Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-        }*/
+        }
 
     }
 
@@ -141,24 +136,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Defines a projection that specifies which columns from the database
         // you will actually use after this query.
-        String[] projection = {
-                BookEntry._ID,
-                BookEntry.COLUMN__PRODUCT_NAME,
-                BookEntry.COLUMN_PRICE,
-                BookEntry.COLUMN_IN_STOCK,
-                BookEntry.COLUMN_QUANTITY};
-                //BookEntry.COLUMN_SUPPLIER_NAME,
-                //BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
+        String[] projection = {BookEntry._ID, BookEntry.COLUMN__PRODUCT_NAME, BookEntry.COLUMN_PRICE, BookEntry.COLUMN_IN_STOCK, BookEntry.COLUMN_QUANTITY};
+        //BookEntry.COLUMN_SUPPLIER_NAME,
+        //BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER};
 
-        //this loader will excute the content provider 's query method in the background.
+        //this loader will execute the content provider 's query method in the background.
         // Now create and return a CursorLoader that will take care of
         // creating a Cursor for the data being displayed.
-        return new CursorLoader(this,
-                BookEntry.CONTENT_URI, //the table to the query
+        return new CursorLoader(this, BookEntry.CONTENT_URI, //the table to the query
                 projection,             //the column for the WHERE clause
                 null,           //the value for the WHERE clause
-                null,
-                null);
+                null, null);
 
     }
 
@@ -176,8 +164,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     }
 
-    ////DELETE///
-
+    /**
+     * DELETE
+     */
+    //Confirmation message
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
@@ -206,11 +196,10 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         alertDialog.show();
     }
 
-    /**
-     * Perform the deletion of the product in the database.
-     */
+
+    //Perform the deletion of the product in the database.
     private void deleteAll() {
-        if(BookEntry.CONTENT_URI != null){
+        if (BookEntry.CONTENT_URI != null) {
             //insert a new row in the table with a specific ID
             int delete = getContentResolver().delete(BookEntry.CONTENT_URI, null, null);
             // Otherwise, the insertion was successful and we can display a toast with the row ID.

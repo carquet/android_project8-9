@@ -1,9 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -14,7 +12,6 @@ import android.net.Uri;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,14 +21,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
-
-import org.w3c.dom.Text;
 
 
 /**
@@ -58,7 +52,14 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private Button deleteProductButton;
     private Button orderProductButton;
 
-    //STEP 1. set up boolean to listen to any changed made and warn users when they leave the edit page
+
+    /**
+     * The possible valid values are in the BookContract.java file:
+     * {@link BookEntry#IN_STOCK}, {@link BookEntry#NOT_IN_STOCK}
+     */
+    private int stock = BookEntry.IN_STOCK;
+
+    //NOTIFY: set up boolean to listen to any changed made and warn users when they leave the edit page
     private boolean bookHasChanged = false;
     private View.OnTouchListener touchListener = new View.OnTouchListener() {
         @Override
@@ -69,22 +70,12 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     };
 
 
-    /**
-     * The possible valid values are in the BookContract.java file:
-     * {@link BookEntry#IN_STOCK}, {@link BookEntry#NOT_IN_STOCK}
-     */
-    private int stock = BookEntry.IN_STOCK;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        Intent saleIntent = getIntent();
-
-
-
+        /**Opening Edit page in ADD PRODUCT OR UPDATE PRODUCT MODE*/
         //getting the intent from catalogue activity to update a product from the db
         Intent intent = getIntent();
         currentUri = intent.getData();
@@ -161,28 +152,28 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    // QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0
+    /**QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0*/
 
     private void addQuantity() {
         String quantityString = quantityEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(quantityString)){
+        if (TextUtils.isEmpty(quantityString)) {
             quantityString = "0";
         }
         int quantity = Integer.parseInt(quantityString);
-        quantity = quantity +1;
+        quantity = quantity + 1;
         quantityEditText.setText(String.valueOf(quantity));
     }
 
     private void decreaseQuantity() {
         String quantityString = quantityEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(quantityString)){
+        if (TextUtils.isEmpty(quantityString)) {
             quantityString = "0";
         }
         int quantity = Integer.parseInt(quantityString);
-        if (quantity == 0){
+        if (quantity == 0) {
             Toast.makeText(this, getString(R.string.editor_quantity_negative_error_msg), Toast.LENGTH_SHORT).show();
             return;
-        }else{
+        } else {
             quantity = quantity - 1;
         }
         quantityEditText.setText(String.valueOf(quantity));
@@ -215,6 +206,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                     }
                 }
             }
+
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -233,7 +225,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
-        if ((TextUtils.isEmpty(productNameString)) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))){
+        if ((TextUtils.isEmpty(productNameString)) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))) {
 
             Toast.makeText(this, getString(R.string.missing_info_for_successful_save), Toast.LENGTH_LONG).show();
 
@@ -377,9 +369,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
             }
 
-
         }
-
 
 
     }
@@ -458,7 +448,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
      * Perform the deletion of the product in the database.
      */
     private void delete() {
-        if(currentUri != null){
+        if (currentUri != null) {
             int delete = getContentResolver().delete(currentUri, null, null);
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             if (delete == 0) {

@@ -80,6 +80,12 @@
     <string name="action_sale">sale</string>
     <string name="editor_update_book_failed">your book failed to update</string>
     <string name="editor_update_book_success">Your product has been successfully updated</string>
+    <!--ERROR MESSAGE -->
+    <string name="unknown_uri_error_msg">Cannot query unknown URI</string>
+    <string name="no_null_product_name_error_msg">The name of the product is required</string>
+    <string name="no_null_stock_error_msg">Stock value is required</string>
+    <string name="no_negative_price_error_msg">The price cannot be negative</string>
+    <string name="deletion_no_supported_error_msg">deletion  is not supported for</string>
 
 
 </resources>

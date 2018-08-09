@@ -9,25 +9,25 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import java.security.Provider;
 
+import com.example.android.inventoryapp.R;
 import com.example.android.inventoryapp.data.BookContract.BookEntry;
 
 
 public class InventoryProvider extends ContentProvider {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     public static final String LOG_TAG = InventoryProvider.class.getSimpleName();
-
-    /** initialize the dbhelper*/
-    private InventoryDbHelper dbHelper;
-
-    /** URI matcher code for the content URI for the books table */
+    /**
+     * URI matcher code for the content URI for the books table
+     */
     private static final int BOOKS = 100;
-
-    /** URI matcher code for the content URI for a single book in the books table */
+    /**
+     * URI matcher code for the content URI for a single book in the books table
+     */
     private static final int BOOK_ID = 101;
-
     /**
      * UriMatcher object to match a content URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
@@ -40,9 +40,14 @@ public class InventoryProvider extends ContentProvider {
         // The calls to addURI() go here, for all of the content URI patterns that the provider
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
-        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS );
-        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS+"/#", BOOK_ID);
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS, BOOKS);
+        sUriMatcher.addURI(BookContract.CONTENT_AUTHORITY, BookContract.PATH_BOOKS + "/#", BOOK_ID);
     }
+
+    /**
+     * initialize the dbhelper
+     */
+    private InventoryDbHelper dbHelper;
 
     /**
      * Initialize the provider and the database helper object.
@@ -59,8 +64,7 @@ public class InventoryProvider extends ContentProvider {
      * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
      */
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
         //open the database in reading mode
         SQLiteDatabase database = dbHelper.getReadableDatabase();
@@ -86,9 +90,9 @@ public class InventoryProvider extends ContentProvider {
                 cursor = database.query(BookEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.unknown_uri_error_msg) + uri);
         }
-        // set the notification on the cursor: it checks wheter there was any change made on the specified uri.
+        // set the notification on the cursor: it checks whether there was any change made on the specified uri.
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
@@ -104,7 +108,7 @@ public class InventoryProvider extends ContentProvider {
             case BOOKS:
                 return insertBooks(uri, contentValues);
             default:
-                throw new IllegalArgumentException("Cannot query unknown URI " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.unknown_uri_error_msg) + uri);
         }
     }
 
@@ -112,22 +116,22 @@ public class InventoryProvider extends ContentProvider {
         // SANITY CHECK: checks before inserting into the database that the values entered by the user are valid
         String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
         if (productName == null) {
-            throw new IllegalArgumentException("the product cannot be null");
+            throw new IllegalArgumentException(getContext().getString(R.string.no_null_product_name_error_msg));
         }
 
         Integer inStock = contentValues.getAsInteger(BookEntry.COLUMN_IN_STOCK);
-        if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)){
-            throw new IllegalArgumentException("The product requires to be either in stock or not in stock");
+        if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)) {
+            throw new IllegalArgumentException(getContext().getString(R.string.no_null_stock_error_msg));
         }
 
         Integer productPrice = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
-        if (productPrice != null && productPrice < 0){
-            throw new IllegalArgumentException("the price needs to be a positive number");
+        if (productPrice != null && productPrice < 0) {
+            throw new IllegalArgumentException(getContext().getString(R.string.no_negative_price_error_msg));
         }
 
         Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
-        if (quantity != null && quantity < 0){
-            throw new IllegalArgumentException("the quantity needs to be a positive number");
+        if (quantity != null && quantity < 0) {
+            throw new IllegalArgumentException(getContext().getString(R.string.editor_quantity_negative_error_msg));
         }
 
         // No need to check the supplier name and its phone number, any value is valid (including null).
@@ -155,7 +159,7 @@ public class InventoryProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
-        switch (match){
+        switch (match) {
             case BOOKS:
                 return updateBook(uri, contentValues, selection, selectionArgs);
             case BOOK_ID:
@@ -164,48 +168,46 @@ public class InventoryProvider extends ContentProvider {
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateBook(uri, contentValues, selection, selectionArgs);
             default:
-                throw new IllegalArgumentException("Update is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.unknown_uri_error_msg) + uri);
 
         }
     }
 
     private int updateBook(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
 
-
         // SANITY CHECK: checks before updating the database with the new values entered by the user.
-        if(contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)){
+        if (contentValues.containsKey(BookEntry.COLUMN__PRODUCT_NAME)) {
             String productName = contentValues.getAsString(BookEntry.COLUMN__PRODUCT_NAME);
             if (productName == null || productName.isEmpty()) {
-                throw new IllegalArgumentException("the product cannot be null");
+                throw new IllegalArgumentException(getContext().getString(R.string.no_null_product_name_error_msg));
             }
         }
 
-        if(contentValues.containsKey(BookEntry.COLUMN_IN_STOCK)){
+        if (contentValues.containsKey(BookEntry.COLUMN_IN_STOCK)) {
             Integer inStock = contentValues.getAsInteger(BookEntry.COLUMN_IN_STOCK);
-            if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)){
-                throw new IllegalArgumentException("The product requires to be either in stock or not in stock");
+            if ((inStock != BookEntry.IN_STOCK) && (inStock != BookEntry.NOT_IN_STOCK)) {
+                throw new IllegalArgumentException(getContext().getString(R.string.no_null_stock_error_msg));
             }
         }
 
-        if(contentValues.containsKey(BookEntry.COLUMN_PRICE)){
+        if (contentValues.containsKey(BookEntry.COLUMN_PRICE)) {
             Integer productPrice = contentValues.getAsInteger(BookEntry.COLUMN_PRICE);
-            if ((productPrice == null) || (productPrice < 0)){
-                throw new IllegalArgumentException("the price needs to be a positive number");
+            if ((productPrice == null) || (productPrice < 0)) {
+                throw new IllegalArgumentException(getContext().getString(R.string.no_negative_price_error_msg));
             }
         }
 
-        if(contentValues.containsKey(BookEntry.COLUMN_QUANTITY)){
+        if (contentValues.containsKey(BookEntry.COLUMN_QUANTITY)) {
             Integer quantity = contentValues.getAsInteger(BookEntry.COLUMN_QUANTITY);
-            if (quantity < 0){
-                throw new IllegalArgumentException("the quantity needs to be a positive number");
+            if (quantity < 0) {
+                throw new IllegalArgumentException(getContext().getString(R.string.editor_quantity_negative_error_msg));
             }
         }
 
         // No need to check the supplier name and its phone number, any value is valid (including null).
 
-
-       //NOTIFY: checks that any change has been made
-        if(contentValues.size() == 0){
+        //NOTIFY: checks that any change has been made
+        if (contentValues.size() == 0) {
             return 0;
         }
 
@@ -215,13 +217,12 @@ public class InventoryProvider extends ContentProvider {
         //enter the new info
         int updateBookUri = database.update(BookEntry.TABLE_NAME, contentValues, selection, selectionArgs);
 
-        if(updateBookUri != 0) {//notify for the front end to update
+        if (updateBookUri != 0) {//notify for the front end to update
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
         // Returns the number of database rows affected by the update statement
         return updateBookUri;
-
 
 
     }
@@ -242,7 +243,7 @@ public class InventoryProvider extends ContentProvider {
         switch (match) {
             case BOOKS: //delete all rows
                 rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
-                if(rowsDeleted != 0){ //if the integer returned is 1 or more, it means that one or more rows have been deleted.
+                if (rowsDeleted != 0) { //if the integer returned is 1 or more, it means that one or more rows have been deleted.
                     //NOTIFY to update the front
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
@@ -252,12 +253,12 @@ public class InventoryProvider extends ContentProvider {
                 selection = BookEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = database.delete(BookEntry.TABLE_NAME, selection, selectionArgs);
-                if (rowsDeleted != 0){
+                if (rowsDeleted != 0) {
                     getContext().getContentResolver().notifyChange(uri, null);
                 }
                 return rowsDeleted;
             default:
-                throw new IllegalArgumentException("deletion  is not supported for " + uri);
+                throw new IllegalArgumentException(getContext().getString(R.string.deletion_no_supported_error_msg) + uri);
         }
     }
 

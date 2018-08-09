@@ -31,22 +31,21 @@ public final class BookContract {
     //CREATE TABLE books(product_name, price, in_stock,quantity,supplier_name,supplier_phone_number)
 
     public static abstract class BookEntry implements BaseColumns {
-        /** The content URI to access the book data in the provider
+        /**
+         * The content URI to access the book data in the provider
          * Uri object with withAppendedPath method: Creates a new Uri by appending an already-encoded path segment to a base Uri.
-         * */
+         */
         public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_BOOKS);
 
         /**
          * The MIME type
          */
-        public static final String CONTENT_LIST_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String CONTENT_LIST_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
         /**
          * The MIME type
          */
-        public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_BOOKS;
 
 
         public static final String TABLE_NAME = "books";
