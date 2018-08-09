@@ -78,6 +78,8 @@
     <string name="editor_quantity_negative_error_msg">Your quantity cannot be negative</string>
     <string name="action_order">order</string>
     <string name="action_sale">sale</string>
+    <string name="editor_update_book_failed">your book failed to update</string>
+    <string name="editor_update_book_success">Your product has been successfully updated</string>
 
 
 </resources>
