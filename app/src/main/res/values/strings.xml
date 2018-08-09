@@ -91,6 +91,8 @@
     <string name="deletion_no_supported_error_msg">deletion  is not supported for</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
+    <string name="no_null_supplier_name_error_msg">The supplier name is required</string>
+    <string name="no_null_supplier_phone_error_msg">supplier\'s phone number is required</string>
 
 
 </resources>

@@ -75,7 +75,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
-        /**Opening Edit page in ADD PRODUCT OR UPDATE PRODUCT MODE*/
+        /*Opening Edit page in ADD PRODUCT OR UPDATE PRODUCT MODE*/
         //getting the intent from catalogue activity to update a product from the db
         Intent intent = getIntent();
         currentUri = intent.getData();
@@ -152,7 +152,9 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
-    /**QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0*/
+    /**
+     * QUANTITY BUTTON: when pressed it removes or add one to the quantity number. The quantity cannot go under 0
+     */
 
     private void addQuantity() {
         String quantityString = quantityEditText.getText().toString().trim();
@@ -225,7 +227,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         String supplierNameString = supplierNameEditText.getText().toString().trim();
         String supplierPhoneNumber = supplierPhoneNumberEditText.getText().toString().trim();
 
-        if ((TextUtils.isEmpty(productNameString)) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString)))) {
+        if ((TextUtils.isEmpty(productNameString)) || (TextUtils.isEmpty(priceString) || (TextUtils.isEmpty(quantityString) || (TextUtils.isEmpty(supplierNameString) || (TextUtils.isEmpty(supplierPhoneNumber)))))) {
 
             Toast.makeText(this, getString(R.string.missing_info_for_successful_save), Toast.LENGTH_LONG).show();
 
@@ -352,8 +354,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
 
             //display information from the current product
             productNameEditText.setText(product);
-            supplierNameEditText.setText(supplier);
-            supplierPhoneNumberEditText.setText(phoneNumber);
             priceEditText.setText(String.valueOf(priceFloat));
             quantityEditText.setText(String.valueOf(quantityInt));
             switch (stock) {
@@ -368,6 +368,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                     break;
 
             }
+            supplierNameEditText.setText(supplier);
+            supplierPhoneNumberEditText.setText(phoneNumber);
 
         }
 

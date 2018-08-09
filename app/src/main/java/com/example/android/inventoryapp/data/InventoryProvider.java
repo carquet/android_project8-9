@@ -7,6 +7,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Log;
 
 
@@ -204,7 +205,20 @@ public class InventoryProvider extends ContentProvider {
             }
         }
 
-        // No need to check the supplier name and its phone number, any value is valid (including null).
+        if (contentValues.containsKey(BookEntry.COLUMN_SUPPLIER_NAME)){
+            String supplierName = contentValues.getAsString(BookEntry.COLUMN_SUPPLIER_NAME);
+            if (TextUtils.isEmpty(supplierName)) {
+                throw new IllegalArgumentException(getContext().getString(R.string.no_null_supplier_name_error_msg));
+            }
+        }
+
+        if (contentValues.containsKey(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER)){
+            String supplierPhoneNumber = contentValues.getAsString(BookEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
+            if (TextUtils.isEmpty(supplierPhoneNumber)) {
+                throw new IllegalArgumentException(getContext().getString(R.string.no_null_supplier_phone_error_msg));
+            }
+        }
+
 
         //NOTIFY: checks that any change has been made
         if (contentValues.size() == 0) {
