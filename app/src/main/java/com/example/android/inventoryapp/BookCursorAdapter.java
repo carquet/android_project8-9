@@ -52,7 +52,6 @@ public class BookCursorAdapter extends CursorAdapter {
         TextView stockView = (TextView) view.findViewById(R.id.stock);
         TextView quantityView = (TextView) view.findViewById(R.id.quantity);
         Button saleButton = (Button) view.findViewById(R.id.action_sale);
-        TextView id = (TextView) view.findViewById(R.id.id);
         //Supplier name and phone number are not needed in the UI at the moment
 
         // EXTRACT properties from cursor

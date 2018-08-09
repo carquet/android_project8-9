@@ -8,6 +8,50 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for the product name in the Catalog-->
+    <style name="ProductNameTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/dark_blue</item>
+    </style>
+
+    <!-- Price display -->
+    <style name="ProductPriceTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:textColor">@color/price_color</item>
+        <item name="android:layout_below">@+id/product_name</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
+    </style>
+
+    <!-- stock display -->
+    <style name="stock">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
+        <item name="android:textColor">@color/in_stock</item>
+    </style>
+
+    <!-- stock bubble -->
+    <style name="stock_bubble">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/stock_bubble</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- SALE BUTTON -->
+    <style name="sale_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">50dp</item>
+        <item name="android:focusable">false</item>
+    </style>
+
     <!-- Theme of the editor -->
     <style name="EditorTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/editorColorPrimary</item>
@@ -23,7 +67,6 @@
         <item name="android:paddingTop">16dp</item>
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-medium</item>
-        <item name="android:textAppearance">?android:textAppearanceSmall</item>
     </style>
 
     <!-- Style for an EditText field in the editor -->
@@ -42,6 +85,13 @@
         <item name="android:paddingRight">16dp</item>
         <item name="android:paddingTop">16dp</item>
         <item name="android:textAppearance">?android:textAppearanceSmall</item>
+    </style>
+
+    <!-- delete and order button int the edit page -->
+    <style name="action_button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">25dp</item>
     </style>
 
 

@@ -1,78 +1,58 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Layout for a single list item in the list of pets -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!-- Layout for a single list item in the list of pets -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:padding="10dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="2">
+        android:layout_weight="2"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textColor="#2B3D4D"
-            tools:text="product name" />
+            style="@style/ProductNameTheme"
+            tools:text="@string/hint_product_name" />
+
         <TextView
             android:id="@+id/product_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#AEB6BD"
-            tools:text="10.34"
-            android:paddingTop="2dp"/>
+            style="@style/ProductPriceTheme"
+            tools:text="@string/hint_price" />
+
+        <TextView
+            android:id="@+id/product_price_currency"
+            style="@style/ProductPriceTheme"
+            android:layout_toRightOf="@+id/product_price"
+            android:text="@string/currency_price" />
+
         <TextView
             android:id="@+id/stock"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/in_stock"
-            tools:text="in stock"/>
-        <TextView
-            android:id="@+id/id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textColor="@color/in_stock"
-            tools:text="in stock"/>
+            style="@style/stock"
+            android:layout_below="@+id/product_price"
+            tools:text="@string/in_stock" />
 
-    </LinearLayout>
-
+    </RelativeLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_weight="1"
-        android:gravity="right">
+        android:gravity="end"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/quantity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:textColor="#ffffff"
-            android:background="@drawable/stock_bubble"
-            android:gravity="center"
-            android:textSize="20sp"
-            tools:text="0"/>
+            style="@style/stock_bubble"
+            tools:text="0" />
+
         <Button
             android:id="@+id/action_sale"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/action_sale"
-            android:focusable="false"
-            android:layout_marginLeft="50dp"/>
-
+            style="@style/sale_button"
+            android:text="@string/action_sale" />
 
     </LinearLayout>
 

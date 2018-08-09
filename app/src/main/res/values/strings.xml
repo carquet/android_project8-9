@@ -86,6 +86,8 @@
     <string name="no_null_stock_error_msg">Stock value is required</string>
     <string name="no_negative_price_error_msg">The price cannot be negative</string>
     <string name="deletion_no_supported_error_msg">deletion  is not supported for</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
 
 
 </resources>

@@ -9,7 +9,7 @@
 
     <!--If your shape requires only one solid color-->
     <solid
-        android:color="@color/colorPrimary" />
+        android:color="@color/in_stock" />
 
     <size
         android:width="75dp"
