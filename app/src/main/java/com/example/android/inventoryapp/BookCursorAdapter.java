@@ -1,6 +1,7 @@
 package com.example.android.inventoryapp;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -96,10 +97,53 @@ public class BookCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                float otherPrice = productPriceFloat;
-                otherPrice--;
+                //Take the current product's displayed price and remove 1
+                float currentProductQuantityMinusOne = quantity;
+                currentProductQuantityMinusOne--;
+                //Put the currentProductPriceReduced into the DB in the correct column
                 Uri currentProduct = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, productId);
-                Toast.makeText(context, String.valueOf(otherPrice), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, String.valueOf(currentProductQuantityMinusOne), Toast.LENGTH_SHORT).show();
+                //defines an object to put the values
+                ContentValues quantityValues = new ContentValues();
+                quantityValues.put(BookContract.BookEntry.COLUMN_QUANTITY, currentProductQuantityMinusOne);
+
+                //insert the updated information into its correct column
+                int update = context.getContentResolver().update(currentProduct, quantityValues, null, null);
+                //if not updated, the toast will display 0 row updated
+                if (update == 0) {
+                    Toast.makeText(context, "cest pas gagné", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "cest dans la poche", Toast.LENGTH_SHORT).show();
+
+                }
+
+
+                /*//chekcs if it is a new product or an existing one by checking the existence of the uri
+                if (currentUri == null) {
+                    //check whether all the information required is entered
+                    //insert a new row in the table with a specific ID
+                    Uri newUri = getContentResolver().insert(BookEntry.CONTENT_URI, values);
+                    // Show a toast message depending on whether or not the insertion was successful
+                    if (newUri == null) {
+                        // If the row ID is -1, then there was an error with insertion.
+                        Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                        Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+                    }
+
+                } else {
+                    //insert a new row in the table with a specific ID
+                    int update = getContentResolver().update(currentUri, values, null, null);
+                    // Otherwise, the insertion was successful and we can display a toast with the row ID.
+                    if (update == 0) {
+                        Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+*/
 
             }
         });
