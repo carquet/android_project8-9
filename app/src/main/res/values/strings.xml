@@ -34,6 +34,7 @@
     <!-- MENUS OPTIONS-->
     <!-- Catalog menu -->
     <string name="action_insert_dummy_data">insert dummy data</string>
+    <string name="action_delete_all_data">Delete all products</string>
     <!--edit menu-->
     <string name="action_save">save</string>
 
@@ -53,6 +54,16 @@
     <string name="keep_editing">keep editing</string>
     <string name="action_delete">delete</string>
 
+    <!-- Dialog message to ask the user to confirm deleting all the product [CHAR LIMIT=NONE] -->
+    <string name="delete_all_dialog_msg">Delete all products?</string>
+    <string name="editor_delete_all_product_failed">your products were not deleted</string>
+    <string name="editor_delete_all_product_successful">all your products were deleted successfully</string>
+    <string name="supplier_unknown">Supplier unknown</string>
+    <string name="supplier_phonenumber_unknown">Supplier phone number unknown</string>
+    <string name="editor_quantity_negative_error_msg">Your quantity cannot be negative</string>
+    <string name="editor_update_book_failed">your book failed to update</string>
+    <string name="editor_update_book_success">Your product has been successfully updated</string>
+
     <!-- Toast message in editor when current product was successfully deleted [CHAR LIMIT=NONE] -->
     <string name="editor_delete_product_successful">Product deleted</string>
 
@@ -60,7 +71,7 @@
     <string name="editor_delete_product_failed">Error with deleting your product</string>
 
     <!-- Dialog message to ask the user to confirm deleting the current product [CHAR LIMIT=NONE] -->
-    <string name="delete_dialog_msg">Delete this product?</string>
+    <string name="delete_dialog_msg">Are you sure you want to delete this product?</string>
 
     <!-- Dialog button text for the option to confirm deleting the current product [CHAR LIMIT=20] -->
     <string name="delete">Delete</string>
@@ -68,18 +79,10 @@
     <!-- Dialog button text for the option to cancel deletion of the current product [CHAR LIMIT=20] -->
     <string name="cancel">Cancel</string>
 
-    <!-- Dialog message to ask the user to confirm deleting all the product [CHAR LIMIT=NONE] -->
-    <string name="delete_all_dialog_msg">Delete all products?</string>
-    <string name="action_delete_all_data">Delete all products</string>
-    <string name="editor_delete_all_product_failed">your products were not deleted</string>
-    <string name="editor_delete_all_product_successful">all your products were deleted successfully</string>
-    <string name="supplier_unknown">Supplier unknown</string>
-    <string name="supplier_phonenumber_unknown">Supplier phone number unknown</string>
-    <string name="editor_quantity_negative_error_msg">Your quantity cannot be negative</string>
+    <!-- Edit page Button -->
     <string name="action_order">order</string>
     <string name="action_sale">sale</string>
-    <string name="editor_update_book_failed">your book failed to update</string>
-    <string name="editor_update_book_success">Your product has been successfully updated</string>
+
     <!--ERROR MESSAGE -->
     <string name="unknown_uri_error_msg">Cannot query unknown URI</string>
     <string name="no_null_product_name_error_msg">The name of the product is required</string>
