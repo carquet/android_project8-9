@@ -96,8 +96,8 @@ public class BookCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Uri currentProduct = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, productId);
-                Toast.makeText(context, String.valueOf(productId), Toast.LENGTH_SHORT).show();
+                Uri currentProduct = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, productId);
+                Toast.makeText(context, String.valueOf(currentProduct), Toast.LENGTH_SHORT).show();
 
             }
         });
