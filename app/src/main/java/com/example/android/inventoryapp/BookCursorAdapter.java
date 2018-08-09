@@ -60,7 +60,7 @@ public class BookCursorAdapter extends CursorAdapter {
         // Extract properties from cursor
         final int productId = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String productNameString = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
-        float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
+        final float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
         final int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
 
@@ -96,8 +96,10 @@ public class BookCursorAdapter extends CursorAdapter {
         saleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                float otherPrice = productPriceFloat;
+                otherPrice--;
                 Uri currentProduct = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, productId);
-                Toast.makeText(context, String.valueOf(currentProduct), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, String.valueOf(otherPrice), Toast.LENGTH_SHORT).show();
 
             }
         });
