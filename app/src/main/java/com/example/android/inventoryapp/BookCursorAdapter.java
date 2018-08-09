@@ -1,14 +1,22 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.android.inventoryapp.data.BookContract;
 
 /**
  * * {@link BookCursorAdapter} is an adapter for a list or grid view
@@ -26,6 +34,7 @@ public class BookCursorAdapter extends CursorAdapter {
      */
     public BookCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
+
     }
 
     // The newView method is used to inflate a new view and return it,
@@ -35,34 +44,43 @@ public class BookCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find fields to populate in inflated template
         TextView productNameView = (TextView) view.findViewById(R.id.product_name);
         TextView productPriceView = (TextView) view.findViewById(R.id.product_price);
         TextView stockView = (TextView) view.findViewById(R.id.stock);
         TextView quantityView = (TextView) view.findViewById(R.id.quantity);
+        Button saleButton = (Button) view.findViewById(R.id.action_sale);
+        TextView id = (TextView) view.findViewById(R.id.id);
+
+        //Supplier name and phone number are not needed in the UI at the moment
         //TextView supplierNameView = (TextView) view.findViewById(R.id.supplier_name);
         //TextView phoneNumberView = (TextView) view.findViewById(R.id.supplier_phone_number);
 
         // Extract properties from cursor
+        final int productId = cursor.getInt(cursor.getColumnIndexOrThrow("_id"));
         String productNameString = cursor.getString(cursor.getColumnIndexOrThrow("product_name"));
         float productPriceFloat = cursor.getFloat(cursor.getColumnIndexOrThrow("price"));
         int stock = cursor.getInt(cursor.getColumnIndexOrThrow("in_stock"));
-        int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-        //String supplierName = cursor.getString(cursor.getColumnIndexOrThrow("supplier_name"));
-        //String supplierPhoneNumber = cursor.getString(cursor.getColumnIndexOrThrow("supplier_phone_number"));
+        final int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+
 
 
         // Populate fields with extracted properties
+        //Name of product
         productNameView.setText(productNameString);
+        //price of product
         productPriceView.setText(String.valueOf(productPriceFloat));
+        //stock of product
         if (stock == 0) {
             stockView.setText(R.string.not_in_stock);
         } else {
             stockView.setText(R.string.in_stock);
         }
+        //quantity of product
         quantityView.setText(String.valueOf(quantity));
-        //see issue #1 next iteration: set an empty field if there is no information
+
+        //Supplier name and phone number are not needed at the moment in the UI
         /*if(TextUtils.isEmpty(supplierName)){
             supplierNameView.setText(R.string.supplier_unknown);
         }else{
@@ -75,8 +93,17 @@ public class BookCursorAdapter extends CursorAdapter {
             phoneNumberView.setText(supplierPhoneNumber);
         }*/
 
+        saleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Uri currentProduct = ContentUris.withAppendedId(BookContract.BookEntry.CONTENT_URI, productId);
+                Toast.makeText(context, String.valueOf(productId), Toast.LENGTH_SHORT).show();
+
+            }
+        });
 
     }
+
 
 
 }

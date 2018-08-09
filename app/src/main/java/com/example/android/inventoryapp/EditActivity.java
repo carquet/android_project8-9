@@ -81,6 +81,10 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
 
+        Intent saleIntent = getIntent();
+
+
+
         //getting the intent from catalogue activity to update a product from the db
         Intent intent = getIntent();
         currentUri = intent.getData();

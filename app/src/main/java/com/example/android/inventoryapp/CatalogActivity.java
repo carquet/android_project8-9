@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,6 +68,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 startActivity(updateEditIntent);
             }
         });
+
+
 
         //ASYNC TASK
         //1. setting up the loader and launching it --> 2. override methods: onCreateLoader, onLoadFinish, onLoaderReset

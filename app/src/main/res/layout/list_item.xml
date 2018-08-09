@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="0.7">
+        android:layout_weight="2">
         <TextView
             android:id="@+id/product_name"
             android:layout_width="wrap_content"
@@ -29,51 +29,29 @@
             android:textColor="#AEB6BD"
             tools:text="10.34"
             android:paddingTop="2dp"/>
-<!--        <TextView
-            android:id="@+id/supplier_name"
+        <TextView
+            android:id="@+id/stock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="#AEB6BD"
-            tools:text="supplier name"
-            android:paddingTop="2dp"/>-->
-
-
-<!--        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/call"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_call"
-                android:layout_marginRight="10dp"/>
-            <TextView
-                android:id="@+id/supplier_phone_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/call"
-                android:textColor="#AEB6BD"
-                tools:text="222-222-222"/>
-        </RelativeLayout>-->
+            android:textColor="@color/in_stock"
+            tools:text="in stock"/>
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/in_stock"
+            tools:text="in stock"/>
 
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/stock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif"
-        android:textColor="#ffffff"
-        android:background="@drawable/stock_bubble"
-        android:gravity="center"
-        tools:text="in stock"/>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_weight="1"
         android:gravity="right">
 
@@ -82,10 +60,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:textColor="#AEB6BD"
-            android:layout_gravity="center"
+            android:textColor="#ffffff"
+            android:background="@drawable/stock_bubble"
+            android:gravity="center"
             android:textSize="20sp"
             tools:text="0"/>
+        <Button
+            android:id="@+id/action_sale"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_sale"
+            android:focusable="false"
+            android:layout_marginLeft="50dp"/>
+
 
     </LinearLayout>
 
