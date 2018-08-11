@@ -23,16 +23,17 @@
 
     <!-- Label for the price in the editor  -->
     <string name="textview_price">price</string>
-    <!-- Label for the price hint in the editor [NUM LIMIT=10] -->
+    <!-- Label for the price hint in the editor [DIGITS LIMIT= 10] -->
     <string name="hint_price">price</string>
-    <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the price hint in the editor -->
     <string name="currency_price">€</string>
 
-    <!-- Label for the quantity in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the quantity in the editor -->
     <string name="textview_quantity">Quantity</string>
+    <!-- [DIGITS LIMIT = 10] -->
     <string name="hint_quantity">quantity</string>
 
-    <!-- MENUS OPTIONS-->
+    <!-- MENU OPTIONS-->
     <!-- Catalog menu -->
     <string name="action_insert_dummy_data">insert dummy data</string>
     <string name="action_delete_all_data">Delete all products</string>
@@ -44,7 +45,6 @@
     <string name="edit_activity_add_new_product">Add a product</string>
 
     <!-- LOG -->
-    <string name="error_log_provider_insert_one_book">Failed to insert row for</string>
     <string name="editor_insert_book_failed">Fail to save in the database</string>
     <string name="editor_insert_book_successful">Your book has been successfully saved</string>
     <string name="empty_shelf_message">Oops, looks like the shelf is empty</string>
@@ -59,8 +59,6 @@
     <string name="delete_all_dialog_msg">Delete all products?</string>
     <string name="editor_delete_all_product_failed">your products were not deleted</string>
     <string name="editor_delete_all_product_successful">all your products were deleted successfully</string>
-    <string name="supplier_unknown">Supplier unknown</string>
-    <string name="supplier_phonenumber_unknown">Supplier phone number unknown</string>
     <string name="editor_quantity_negative_error_msg">Your quantity cannot be negative</string>
     <string name="editor_update_book_failed">your book failed to update</string>
     <string name="editor_update_book_success">Your product has been successfully updated</string>

@@ -63,7 +63,6 @@
 
         <!-- IN STOCK category -->
         <LinearLayout
-            android:id="@+id/container_in_stock"
             android:layout_width="360dp"
             android:layout_height="50dp"
             android:orientation="horizontal"

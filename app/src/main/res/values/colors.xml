@@ -10,7 +10,6 @@
     <color name="colorAccent">#009a95</color>
 
     <!-- Primary color for the editor -->
-    <color name="editorColorPrimary">#2D3640</color>
 
     <!-- Warning colours-->
     <color name="warning">#ff3135</color>
@@ -21,7 +20,5 @@
     <color name="price_color">#AEB6BD</color>
 
     <!-- Primary dark color for the editor -->
-    <color name="editorColorPrimaryDark">#009a95</color>
-    <color name="not_in_stock">#ff3135</color>
     <color name="in_stock">#00e24a</color>
 </resources>
