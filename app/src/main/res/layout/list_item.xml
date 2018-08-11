@@ -20,7 +20,8 @@
         <TextView
             android:id="@+id/product_price"
             style="@style/ProductPriceTheme"
-            tools:text="@string/hint_price" />
+            tools:text="@string/hint_price"
+            />
 
         <TextView
             android:id="@+id/product_price_currency"

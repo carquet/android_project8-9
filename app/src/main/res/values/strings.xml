@@ -10,19 +10,20 @@
     <!-- Label for the supplier name in the editor [CHAR LIMIT=30] -->
     <string name="hint_supplier_name">Supplier Name</string>
 
-    <!-- Label for the supplier phone number in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the supplier phone number in the editor [NUM LIMIT=15] -->
+    <!--15 is the max number for a phone number-->
     <string name="hint_supplier_phonenumber">555 555 555</string>
 
-    <!-- Label for the in stock spinner  in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the in stock spinner  in the editor -->
     <string name="textview_in_stock">In Stock</string>
-    <!-- Label for dropdown menu option if the boos is in stock [CHAR LIMIT=20] -->
+    <!-- Label for dropdown menu option if the boos is in stock  -->
     <string name="in_stock">In Stock</string>
-    <!-- Label for dropdown menu option if the book in not in stock [CHAR LIMIT=20] -->
+    <!-- Label for dropdown menu option if the book in not in stock  -->
     <string name="not_in_stock">Not in Stock</string>
 
-    <!-- Label for the price in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the price in the editor  -->
     <string name="textview_price">price</string>
-    <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
+    <!-- Label for the price hint in the editor [NUM LIMIT=10] -->
     <string name="hint_price">price</string>
     <!-- Label for the price hint in the editor [CHAR LIMIT=30] -->
     <string name="currency_price">€</string>
@@ -93,6 +94,7 @@
     <string name="plus">+</string>
     <string name="no_null_supplier_name_error_msg">The supplier name is required</string>
     <string name="no_null_supplier_phone_error_msg">supplier\'s phone number is required</string>
+    <string name="editor_quantity_too_high_error_msg">Your quantity cannot go beyond 9 digits</string>
 
 
 </resources>

@@ -162,8 +162,13 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             quantityString = "0";
         }
         int quantity = Integer.parseInt(quantityString);
-        quantity = quantity + 1;
-        quantityEditText.setText(String.valueOf(quantity));
+        if(quantity >= 999999999){
+            Toast.makeText(this, getString(R.string.editor_quantity_too_high_error_msg), Toast.LENGTH_SHORT).show();
+        }else {
+            quantity = quantity + 1;
+            quantityEditText.setText(String.valueOf(quantity));
+        }
+
     }
 
     private void decreaseQuantity() {
@@ -218,6 +223,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     }
 
     private void save() {
+
 
         // Read from input fields
         // Use trim to eliminate leading or trailing white space

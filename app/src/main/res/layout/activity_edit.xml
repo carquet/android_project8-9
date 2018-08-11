@@ -37,7 +37,8 @@
                     android:id="@+id/edit_product_name"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_product_name"
-                    android:inputType="textCapWords" />
+                    android:inputType="textCapWords"
+                    android:maxLength="30"/>
 
                 <!-- SUPPLIER NAME field -->
                 <EditText
@@ -45,6 +46,7 @@
                     style="@style/EditorFieldStyle"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_supplier_name"
+                    android:maxLength="30"
                     android:inputType="textCapWords" />
 
                 <!-- PHONE NUMBER field -->
@@ -53,6 +55,7 @@
                     style="@style/EditorFieldStyle"
                     android:layout_height="wrap_content"
                     android:hint="@string/hint_supplier_phonenumber"
+                    android:maxLength="15"
                     android:inputType="phone" />
             </LinearLayout>
 
@@ -117,7 +120,8 @@
                     android:hint="@string/hint_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal" />
+                    android:inputType="numberDecimal"
+                    android:maxLength="10"/>
 
                 <!-- CURRENCY (eu) -->
                 <TextView
@@ -152,6 +156,7 @@
                     android:id="@+id/edit_quantity"
                     android:hint="@string/hint_quantity"
                     android:inputType="number"
+                    android:maxLength="10"
                     style="@style/EditorFieldStyle" />
 
             </RelativeLayout>
