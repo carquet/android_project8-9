@@ -256,6 +256,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             } else {
                 // Otherwise, the insertion was successful and we can display a toast with the row ID.
                 Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
+                finish();
             }
 
         } else {
@@ -266,8 +267,9 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 Toast.makeText(this, getString(R.string.editor_insert_book_failed), Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, getString(R.string.editor_insert_book_successful), Toast.LENGTH_SHORT).show();
-
+                finish();
             }
+
         }
 
 
@@ -291,7 +293,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 // Save books to inventory database
                 save();
                 // Exit activity
-                finish();
+                //finish();
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
